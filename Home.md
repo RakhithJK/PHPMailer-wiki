@@ -1,4 +1,4 @@
-Welcome to the PHPMailer wiki!
+# Welcome to the PHPMailer wiki!
 
 To learn about PHPMailer, please check out the [code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and [the documentation](https://github.com/PHPMailer/PHPMailer/tree/master/docs).
 
