@@ -2,9 +2,16 @@ PHPMailer is commonly used to send to mailing lists - indeed it is at the core o
 
 You can find a simple example of sending to a list held in a MySQL database [here](https://github.com/PHPMailer/PHPMailer/blob/master/examples/mailing_list.phps).
 
+Some basic optiisations can be seen in that script:
+* Don't create a new PHPMailer instance every time around the loop.
+* Enable `SMTPKeepAlive` and sort your list by domain to reduce SMTP overhead and maximise connection re-use.
+* Set all the properties that will remain the same for every recipient (e.g. `From`, `FromName`, `Subject` etc) *before* the sending loop so they only happen once.
+* Inside the loop you should have only calls to `addAddress()`, `send()` and `clearAddresses()` (after sending).
+
+If the messages you send are absolutely identical, you can add all the addressees using `addBCC()`, which will mean you only need to `send()` a single message, though most mail servers will have a limit on the number of addresses you can send at once.
+
 ## Maximising performance
 
-Enable `SMTPKeepAlive` and sort your list by domain to reduce SMTP overhead and maximise connection re-use.
 
 For ultimate performance, you should submit to a local mail server, though surprisingly using the `isMail()` or `isSendmail()` options in PHPMailer is not necessarily faster than SMTP to localhost, largely because postfix' `sendmail` binary opens a synchronous SMTP connection to localhost anyway - [postfix' docs recommend SMTP to localhost for best performance](http://www.postfix.org/TUNING_README.html#mailing_tips) for this reason.
 
