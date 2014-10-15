@@ -3,7 +3,7 @@ Whatever problem you're having, first make sure you are using the [latest PHPMai
 # Which kind of encryption should I use?
 There's no doubt that you should use encryption at every opportunity, otherwise you're inviting all kinds of unpleasant possibilities for phishing, identity theft etc.
 
-To use any kind of encryption you need the `openssl` PHP extension enabled. Check this by looking at the output of `phpinfo()` or `php -i` (look for an 'openssl' section), or the openssl extention listed in the output of `php -m`.
+To use any kind of encryption you need the `openssl` PHP extension enabled. Check this by looking at the output of `phpinfo()` or `php -i` (look for an 'openssl' section), or the openssl extension listed in the output of `php -m`.
 
 As for what kind to use, the answer is generally simple: Don't use SSL on port 465, it's been [deprecated since 1998](http://en.wikipedia.org/wiki/SMTPS) and is only used by Microsoft products that didn't get the memo; use TLS on port 587 instead:
 
