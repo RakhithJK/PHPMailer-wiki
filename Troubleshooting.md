@@ -16,7 +16,7 @@ or more succinctly:
 $mail->Host = 'tls://smtp.gmail.com:587';
 ```
 # SMTP Error: Could not connect to SMTP host.
-This is commonly reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you're specified in the `Host` property, but doesn't say exactly why. 
+This is commonly reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. 
 
 You can your connectivity this by running some commands on your server (you will need `dnsutils` and `telnet` packages installed). First check DNS is working:
 
