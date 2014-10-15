@@ -2,7 +2,7 @@ PHPMailer is commonly used to send to mailing lists - indeed it is at the core o
 
 You can find a simple example of sending to a list held in a MySQL database [here](https://github.com/PHPMailer/PHPMailer/blob/master/examples/mailing_list.phps).
 
-Some basic optiisations can be seen in that script:
+Some basic optimizations can be seen in that script:
 * Don't create a new PHPMailer instance every time around the loop.
 * Enable `SMTPKeepAlive` and sort your list by domain to reduce SMTP overhead and maximise connection re-use.
 * Set all the properties that will remain the same for every recipient (e.g. `From`, `FromName`, `Subject` etc) *before* the sending loop so they only happen once.
