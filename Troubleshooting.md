@@ -51,6 +51,9 @@ Escape character is '^]'.
 
 (Enter `quit` to get out of that). If port 587 doens't work, you can try port 465 or port 25, and use whichever one works - though bear in mind that port 25 doesn't usually support encryption (see above).
 
+##Firewall redirection
+Another thing to look out for here is that the name the mail server responds with should be related to the server you requested, as you can see in the above example - we asked for `smtp.gmail.com` and got `gmail-smtp-msa.l.google.com`, which looks like it's something to do with google - if instead you see something like the name of your ISP, then it could mean that your ISP's firewall is redirecting you transparently to their own mail servers, and you're likely to see authentication failures because you're logging into the wrong server. This is very likely to happen on port 25, but less likely to happen on ports 465 and 587, so it's yet another reason to use encryption!
+
 **If these connection attempts fail, PHPMailer will not work either**. So go fix your network, then try again. If you are not in control of your own firewall or DNS, you probably need to raise a support ticket with your ISP to fix this (it's very common for them to block or divert port 25 outbound). If they won't fix it, you need to replace your ISP.
 
 Back in PHPMailer, you can get verbose feedback on the connection and the whole SMTP conversation by setting:
