@@ -83,6 +83,12 @@ If your authentication is failing, there are several likely causes:
 
 Generally you do not want to send a username or password over an unencrypted link. Some SMTP authentication schemes do add a minimal level of security (sending short hashes rather than clear text), but these provide only minimal protection, and so most servers do not allow authentication without encryption. Fix this by setting `SMTPSecure = 'tls'` and `Port = 587` as well as setting the `Username` and `Password` properties.
 
+###Gmail and 'access for less secure apps'
+
+Google have recently started imposing a different authentication mechanism for access to their apps, including gmail. This substitutes the authentication for authorisation via OAuth2, and does not actually improve security at all - it simply means you have to enter your ID and password somewhere else, and add complexity to your project to implement OAuth. This means that gmail breaks SMTP and IMAP access, and you may receive authentication failures from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others. They could have simply made use of existing secure authentication mechansisms instead, but apparently they decided it was more fun for you to implement OAuth.
+
+In short, you DO have to 'enable access for less secure apps', though it does not really make your app any less secure.
+
 ##Which kind of encryption should I use?
 There's no doubt that you should use encryption at every opportunity, otherwise you're inviting all kinds of unpleasant possibilities for phishing, identity theft etc.
 
