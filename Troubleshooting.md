@@ -15,7 +15,7 @@ Not so long ago, PHPMailer changed the way that it loaded classes so that it was
 require 'class.phpmailer.php';
 ```
 
-If you do only that, **SMTP sending will fail**. You need to either explicitly include the `class.smtp.php` file, or use the recommended approach of using the supplied autoloader, like this:
+If you do only that, **SMTP sending will fail** with a `Class 'SMTP' not found` error. You need to either explicitly include the `class.smtp.php` file, or use the recommended approach of using the supplied autoloader, like this:
 
 ```php
 require 'PHPMailerAutoload.php';
