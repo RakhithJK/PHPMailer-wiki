@@ -4,9 +4,12 @@ Whatever problem you're having, first make sure you are using the [latest PHPMai
 ##"SMTP Error: Could not connect to SMTP host."
 This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
 
-You can get verbose feedback on the connection and the whole SMTP conversation by setting `SMTPDebug = 4`.
+You can get a verbose transcript of the whole SMTP conversation by setting `SMTPDebug = 2` - if you're submitting a bug report that's probably the best option to choose. If you are having trouble with the initial connection, `SMTPDebug = 3` or `4` will give more info, but rather too much if your problem is not related to the connection itself.
 
 Some techniques to diagnose the source of this error are discussed below.
+
+##Read the SMTP transcript
+If you set `SMTPDebug = 2` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting.
 
 ##Including the wrong file
 Not so long ago, PHPMailer changed the way that it loaded classes so that it was more compatible with composer, many frameworks, and the [PHP PSR-0 autoloading standard](http://www.php-fig.org/psr/psr-0/). Note that because we support PHP back to version 5.0, we cannot support the more recent [PSR-4 standard](http://www.php-fig.org/psr/psr-4/), nor can we use namespaces. Previously, PHPMailer loaded the SMTP class explicitly, and this causes problems if you want to provide your own implementation. You may have seen old scripts doing this:
