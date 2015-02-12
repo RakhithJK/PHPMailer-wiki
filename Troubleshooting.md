@@ -1,5 +1,5 @@
 #Troubleshooting connection problems
-Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer).
+Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in the examples folder. About 90% of questions on StackOverflow make this mistake.
 
 ##"SMTP Error: Could not connect to SMTP host."
 This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
@@ -126,3 +126,11 @@ This means that your PHP installation is not configured to call the `mail()` fun
 
 #It's still not working!
 **If any of the above checks fail, PHPMailer will not work either**, and usually there's nothing that PHPMailer can do about it. So go fix your network, then try again. If you are not in control of your own firewall or DNS, you probably need to raise a support ticket with your ISP to fix this (it's very common for them to block or divert port 25 outbound). If they won't fix it, you need to replace your ISP.
+
+#Where else to get help?
+Several resources are worth checking:
+* [The code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) provided with PHPMailer. Base your code on these, not some ancient example from 2003.
+* [The API docs](http://phpmailer.github.io/PHPMailer/).
+* [The code itself](https://github.com/PHPMailer/PHPMailer/blob/master/class.phpmailer.php) - it's very well commented.
+* [The issue tracker](https://github.com/PHPMailer/PHPMailer/issues) - it's very likely a problem similar to yours has happened before, so **search in there** _before_ opening a ticket.
+* [StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer) - there are a ton of PHPMailer questions on there, the vast majority of which could be fixed by reading this page! **Search the questions** for the error message you're seeing **before** posting a question. If you post a question on SO, make sure you tag it as `PHPMailer` so that we will see it and **please don't** open an issue here as well. The issue tracker here is intended for actual bugs in PHPMailer, not problems with your server.
