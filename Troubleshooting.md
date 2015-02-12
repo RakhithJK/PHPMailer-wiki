@@ -113,5 +113,13 @@ or more succinctly:
 $mail->Host = 'tls://smtp.gmail.com:587';
 ```
 
+##"Could not instantiate mail function"
+
+This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things:
+* Install a local mail server (e.g. postfix).
+* Ensure that your `sendmail_path` points at the sendmail binary (usually `/usr/sbin/sendmail`) in your `php.ini`. Note that on Ubuntu/Debian you may have multiple `.ini` files in `/etc/php5/mods-available` and possibly other locations.
+* Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = 'usr/sbin/sendmail';`).
+* Use `isSMTP()` and send directly using SMTP.
+
 #It's still not working!
 **If any of the above checks fail, PHPMailer will not work either**, and usually there's nothing that PHPMailer can do about it. So go fix your network, then try again. If you are not in control of your own firewall or DNS, you probably need to raise a support ticket with your ISP to fix this (it's very common for them to block or divert port 25 outbound). If they won't fix it, you need to replace your ISP.
