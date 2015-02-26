@@ -137,6 +137,8 @@ $options = array(
 $mail->smtpConnect($options);
 ```
 
+You can also change these settings globally in your php.ini, but that's a **really** bad idea; PHP 5.6 made this change for very good reasons.
+
 ##"Could not instantiate mail function"
 
 This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things:
