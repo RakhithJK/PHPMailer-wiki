@@ -116,6 +116,27 @@ or more succinctly:
 $mail->Host = 'tls://smtp.gmail.com:587';
 ```
 
+##PHP 5.6 certificate verification failure
+In a change from earlier versions, PHP 5.6 verifies certificates on SSL connections. If the SSL config of the server you are connecting to is not correct, you will get an error like this:
+
+```
+Warning: stream_socket_enable_crypto(): SSL operation failed with code 1.
+OpenSSL Error messages: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+```
+
+The correct fix for this is to replace the invalid, misconfigured or self-signed certificate with a good one. Failing that, you can revert to the old **insecure** behaviour by subclassing PHPMailer and overriding the options provided to the `smtpConnect` function like this, though this is not recommended:
+
+```php
+$options = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    )
+);
+$mail->smtpConnect($options);
+```
+
 ##"Could not instantiate mail function"
 
 This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things:
