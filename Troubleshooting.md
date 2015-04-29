@@ -1,5 +1,5 @@
 #Troubleshooting connection problems
-Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of questions on StackOverflow make this mistake.
+Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
 
 ##"SMTP Error: Could not connect to SMTP host."
 This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
@@ -18,7 +18,7 @@ Not so long ago, PHPMailer changed the way that it loaded classes so that it was
 require 'class.phpmailer.php';
 ```
 
-If you do only that, **SMTP sending will fail** with a `Class 'SMTP' not found` error. You need to either explicitly include the `class.smtp.php` file, or use the recommended approach of using the supplied autoloader, like this:
+If you do only that, **SMTP sending will fail** with a `Class 'SMTP' not found` error. You need to either explicitly include the `class.smtp.php` file, or use the recommended approach of using the supplied autoloader (or via composer), like this:
 
 ```php
 require 'PHPMailerAutoload.php';
