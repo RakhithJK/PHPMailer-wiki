@@ -124,20 +124,21 @@ Warning: stream_socket_enable_crypto(): SSL operation failed with code 1.
 OpenSSL Error messages: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
 ```
 
-The correct fix for this is to replace the invalid, misconfigured or self-signed certificate with a good one. Failing that, you can revert to the old **insecure** behaviour by subclassing PHPMailer and overriding the options provided to the `smtpConnect` function like this, though this is not recommended:
+The correct fix for this is to replace the invalid, misconfigured or self-signed certificate with a good one. Failing that, you can allow **insecure** connections via the `SMTPOptions` property introduced in PHPMailer 5.2.10 (it's possible to do this by [subclassing the SMTP class](https://github.com/PHPMailer/PHPMailer/wiki/Overriding-the-SMTP-class) in earlier versions), though this is not recommended:
 
 ```php
-$options = array(
+$mail->SMTPOptions = array(
     'ssl' => array(
         'verify_peer' => false,
         'verify_peer_name' => false,
         'allow_self_signed' => true
     )
 );
-$mail->smtpConnect($options);
 ```
 
 You can also change these settings globally in your php.ini, but that's a **really** bad idea; PHP 5.6 made this change for very good reasons.
+
+Sometimes this behaviour is not quite so apparent; sometimes encryption failures may appear as the client issuing a `QUIT` immediately after trying to do a `STARTTLS`. If you see that happen, you should check the state of your certificates or verification settings.
 
 ##"Could not instantiate mail function"
 
