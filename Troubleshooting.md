@@ -2,7 +2,7 @@
 Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
 
 ##"SMTP Error: Could not connect to SMTP host."
-This may also appear as *`SMTP connect() failed`* in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
+This may also appear as **`SMTP connect() failed`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
 
 You can get a verbose transcript of the whole SMTP conversation by setting `SMTPDebug = 2` - if you're submitting a bug report that's probably the best option to choose. If you are having trouble with the initial connection, `SMTPDebug = 3` or `4` will give more info, but rather too much if your problem is not related to the connection itself.
 
