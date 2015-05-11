@@ -88,13 +88,9 @@ Generally you do not want to send a username or password over an unencrypted lin
 
 ###Gmail and "Allow less secure apps"
 
-Google have recently started imposing a different authentication mechanism for access to their apps, including gmail. This substitutes normal standards-based SMTP authentication for authorisation via OAuth2, and does not really improve security much at all - it simply means you have to enter your ID and password somewhere else (over the same protocols that they classify as insecure), and add complexity to your project to implement OAuth. This change breaks SMTP and IMAP access to gmail, and you may receive authentication failures (usually "5.7.1 Username and Password not accepted") from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others.
+Google have recently started imposing a different authentication mechanism for access to their apps, including gmail. This substitutes normal standards-based SMTP authentication for authorisation via OAuth2, and adds complexity to your project to implement it. This change can break both SMTP and IMAP access to gmail, and you may receive authentication failures (often "5.7.14 Please log in via your web browser") from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others. The error output may include a link to https://support.google.com/mail/bin/answer.py?answer=78754, which gives a list of possible remedies - enabling "[Allow less secure apps](https://support.google.com/accounts/answer/6010255)" will usually solve the problem for PHPMailer, and it does not really make your app significantly less secure.
 
-To do this in PHP you'll need an OAuth2 client class - like [this one](http://www.phpclasses.org/package/7700-PHP-Authorize-and-access-APIs-using-OAuth.html) - to retrieve an authorisation token before making an SMTP connecton as normal. Google's docs on the subject are [here](https://developers.google.com/gmail/xoauth2_protocol).
-
-In short, you *do* have to 'enable access for less secure apps', though it does not really make your app any less secure.
-
-PHPMailer does not currently support this access mechanism, so if you get around to implementing this, please do submit a PR for it!
+PHPMailer does not currently support the OAuth2 access mechanism, so if you get around to implementing this, please do submit a PR for it! To implement a proper solution to this you'll need [an OAuth2 client class](http://www.phpclasses.org/package/7700-PHP-Authorize-and-access-APIs-using-OAuth.html) to retrieve an authorisation token before making an SMTP connection using the mechanism described in [Google's docs](https://developers.google.com/gmail/xoauth2_protocol).
 
 ##Which kind of encryption should I use?
 There's no doubt that you should use encryption at every opportunity, otherwise you're inviting all kinds of unpleasant possibilities for phishing, identity theft etc.
@@ -115,6 +111,8 @@ or more succinctly:
 ```php
 $mail->Host = 'tls://smtp.gmail.com:587';
 ```
+###Opportunistic TLS
+PHPMailer 5.2.10 introduced opportunistic TLS - if it sees that the server is advertising TLS encryption (after you have connected to the server), it enables encryption automatically, even if you have not set `SMTPSecure`. This *might* cause issues if the server is advertising TLS with an invalid certificate, but you can turn it off with `$mail->SMTPAutoTLS = false;`.
 
 ##PHP 5.6 certificate verification failure
 In a change from earlier versions, PHP 5.6 verifies certificates on SSL connections. If the SSL config of the server you are connecting to is not correct, you will get an error like this:
