@@ -98,6 +98,7 @@ If you run the script with debug output enabled, you should look for a sequence 
 2015-05-21 00:45:47	CLIENT -> SERVER: AUTH XOAUTH2 dXNlcj1tYXJjdXMuYm9pbnRvbkBnbWFpbC5jb20BYXV0aD1CZWFyZXIgeWEyOS5lZ0h5NGpXbkZaZFpMaEctV3g1ZUVtbGZiTUhqaG00Yk9BVzZETVVVamVSZDN0ZG5LOTV1bzd6ekFQcHhva3VWNjdJdEhpaWxKVnBROFEBAQ==
 2015-05-21 00:45:47	SERVER -> CLIENT: 235 2.7.0 Accepted
 ```
-You can see it specifying XOAUTH2, and the following `235 2.7.0 Accepted` tells us that the authentication was successful, and now we can go ahead with sending our message as usual.
+You can see the client specifying XOAUTH2, and the subsequent `235 2.7.0 Accepted` from the server tells us that the authentication was successful, and now we can go ahead with sending our message as usual.
+
 ### Credit where it's due
 The XOAUTH2 suport for PHPMailer was written by @sherryl4george, so a big round of applause please!
