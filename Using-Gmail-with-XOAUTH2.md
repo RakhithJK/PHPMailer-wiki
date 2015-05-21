@@ -13,7 +13,7 @@ First of all you need to log into your google account using your usual username 
 
 ![Create project button](images/screen01.png)
 
-Give your project a name and select a data center (in advanced options).
+Give your project a name that reflects its use, for example "www.example.com contact form" and select a data center (in advanced options).
 
 ![New project](images/screen02.png)
 
@@ -68,6 +68,8 @@ Finally it will use your redirect to reload the script, and produce a refresh to
 
 This is what we did all this work for: this value is what you need to perform XOAUTH2 authentication when connecting to Gmail's SMTP server.
 
+I have shown the real values used in this example, but this Client ID has now been deleted so it won't work any more - you must generate your own!
+
 ##Configure your email script
 
 In the examples folder you will find a script called `gmail_xoauth.phps` you can use as the basis for this process. How you use PHPMailer remains largely unchanged relative to the other examples; The differences are that it uses the `PHPMailerOAuth` class instead of the simpler `PHPMailer`, and you need to specify the `XOAUTH2` auth type and fill in the authentication values you obtained above.
@@ -96,4 +98,6 @@ If you run the script with debug output enabled, you should look for a sequence 
 2015-05-21 00:45:47	CLIENT -> SERVER: AUTH XOAUTH2 dXNlcj1tYXJjdXMuYm9pbnRvbkBnbWFpbC5jb20BYXV0aD1CZWFyZXIgeWEyOS5lZ0h5NGpXbkZaZFpMaEctV3g1ZUVtbGZiTUhqaG00Yk9BVzZETVVVamVSZDN0ZG5LOTV1bzd6ekFQcHhva3VWNjdJdEhpaWxKVnBROFEBAQ==
 2015-05-21 00:45:47	SERVER -> CLIENT: 235 2.7.0 Accepted
 ```
-That `235 2.7.0 Accepted` tells us thet the authentication was accepted, and now we can go ahead with sending our message.
+You can see it specifying XOAUTH2, and the following `235 2.7.0 Accepted` tells us that the authentication was successful, and now we can go ahead with sending our message as usual.
+### Credit where it's due
+The XOAUTH2 suport for PHPMailer was written by @sherryl4george, so a big round of applause please!
