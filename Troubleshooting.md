@@ -143,7 +143,7 @@ Sometimes this behaviour is not quite so apparent; sometimes encryption failures
 This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things:
 * Install a local mail server (e.g. postfix).
 * Ensure that your `sendmail_path` points at the sendmail binary (usually `/usr/sbin/sendmail`) in your `php.ini`. Note that on Ubuntu/Debian you may have multiple `.ini` files in `/etc/php5/mods-available` and possibly other locations.
-* Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = 'usr/sbin/sendmail';`).
+* Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = '/usr/sbin/sendmail';`).
 * Use `isSMTP()` and send directly using SMTP.
 
 #It's still not working!
