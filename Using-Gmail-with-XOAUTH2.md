@@ -1,7 +1,7 @@
 PHPMailer 5.2.11 added support for [Google's XOAUTH2](https://developers.google.com/gmail/xoauth2_protocol) SMTP & IMAP authentication mechanism. Using it is *very* complicated compared with other auth mechanisms, so this page is here to tell you what you need to do.
 
 ##Background
-This mechanism replaces the usual username and password combination that allows you to authenticate against an SMTP server, which will then allow you to send messages through it. Since December 2014, gmail has made this their preferred method of connecting to gmail, for both sending and receiving email, and deprecated other systems. If you're not using XOAUTH2, you may experience authentication failures as described in [the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting). You will usually only need to set it up once for your PHP app (not each time you need to send a message), and while it's possible to share the same config across multiple apps, much of the supposed security improvement provided by OAuth stems from using separate client configs for each place you use it, so it's perfectly reasonable to create multiple Client IDs using the process shown below.
+The XOAUTH2 mechanism replaces the usual username and password combination that allows you to authenticate against an SMTP server, which will then allow you to send messages through it. In December 2014 Google made this their preferred method of authenticating for Gmail for both sending and receiving email, and deprecated other systems. If you're not using XOAUTH2, you may experience authentication failures as described in [the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting). You will usually only need to set it up once for your PHP app (not each time you need to send a message), and while it's possible to share the same config across multiple apps, much of the supposed security improvement provided by OAuth stems from using separate client configs for each place you use it, so it's perfectly reasonable to create multiple Client IDs using the process shown below.
 
 There is an earlier version of this system called `XOAUTH` (which Gmail also supports), but PHPMailer only supports the more recent `XOAUTH2`.
 
@@ -68,7 +68,7 @@ Finally it will use your redirect to reload the script, and produce a refresh to
 
 This is what we did all this work for: this value is what you need to perform XOAUTH2 authentication when connecting to Gmail's SMTP server.
 
-I have shown the real values used in this example, but this Client ID has now been deleted so it won't work any more - you must generate your own!
+I have shown the real values used in this example, but this Client ID has now been deleted so it won't work any more (the ability to do this is an OAuth feature) - you must generate your own!
 
 ##Configure your email script
 
