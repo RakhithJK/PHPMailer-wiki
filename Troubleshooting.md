@@ -26,7 +26,7 @@ require 'PHPMailerAutoload.php';
 
 ##DNS failures
 
-These are often seen as connection timeouts, or "could not resolve host" or similar errors. Check your DNS is working by using the `dig` tool (from the `dnsutils` package on Debian/Ubuntu):
+These are often seen as connection timeouts, or "could not resolve host", "getaddrinfo failed" or similar errors. Check your DNS is working by using the `dig` tool (from the `dnsutils` package on Debian/Ubuntu):
 
 ```shell
 dig +short smtp.gmail.com
