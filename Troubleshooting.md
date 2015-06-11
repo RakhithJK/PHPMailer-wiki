@@ -26,7 +26,7 @@ require 'PHPMailerAutoload.php';
 
 ##DNS failures
 
-These are often seen as connection timeouts, or "could not resolve host", "getaddrinfo failed" or similar errors. Check your DNS is working by using the `dig` tool (from the `dnsutils` package on Debian/Ubuntu):
+These are often seen as connection timeouts, or "Temporary failure in name resolution", "could not resolve host", "getaddrinfo failed" or similar errors. Check your DNS is working by using the `dig` tool (from the `dnsutils` package on Debian/Ubuntu):
 
 ```shell
 dig +short smtp.gmail.com
@@ -38,7 +38,7 @@ gmail-smtp-msa.l.google.com.
 173.194.67.108
 173.194.67.109
 ```
-If this fails, PHPMailer will not be able to send email because it won't be able to obtain the correct IP address to connect to. If perhaps you don't have a name in DNS, you can use an IP address directly as the hostname.
+If this fails, PHPMailer will not be able to send email because it won't be able to obtain the correct IP address to connect to. If perhaps you don't have a name in DNS, you can use an IP address directly as the hostname. To fix this you need to figure out why your DNS isn't working - perhaps you have not set up your resolvers?
 
 ##Check it's there at all
 
