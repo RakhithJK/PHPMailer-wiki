@@ -77,6 +77,11 @@ If it produces no output or something that doesn't start with `220`, then either
 ##Firewall redirection
 Another thing to look out for here is that the name the mail server responds with should be related to the server you requested, as you can see in the above example - we asked for `smtp.gmail.com` and got `gmail-smtp-msa.l.google.com`, which looks like it's something to do with google - if instead you see something like the name of your ISP, then it could mean that your ISP's firewall is redirecting you transparently to their own mail servers, and you're likely to see authentication failures because you're logging into the wrong server. This is very likely to happen on port 25, but less likely to happen on ports 465 and 587, so it's yet another reason to use encryption!
 
+##IPv6 blocking
+Some service providers (including Digital Ocean) provide IPv6 connectivity for servers, but block outbound SMTP over IPv6 while allowing it on IPv4. This can be worked around by setting the `Host` property to an IPv4 address explicitly (the `gethostbyname` function only does IPv4 lookups):
+
+    $mail->Host = gethostbyname('smtp.gmail.com');
+
 ##Authentication failures
 
 If your authentication is failing, there are several likely causes:
