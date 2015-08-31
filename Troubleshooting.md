@@ -153,6 +153,7 @@ This means that your PHP installation is not configured to call the `mail()` fun
 
 #It's still not working!
 **If any of the above checks fail, PHPMailer will not work either**, and usually there's nothing that PHPMailer can do about it. So go fix your network, then try again. If you are not in control of your own firewall or DNS, you probably need to raise a support ticket with your ISP to fix this (it's very common for them to block or divert port 25 outbound). If they won't fix it, you need to replace your ISP.
+_PS: BlueHost doesn't support smtp.gmail.com, they want you to use their smtp server. The work around would be to use email associated with BlueHost and their host address Or send using mail() function in this case._
 
 #Where else to get help?
 Several resources are worth checking:
