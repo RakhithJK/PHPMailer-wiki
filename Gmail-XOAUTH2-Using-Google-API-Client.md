@@ -14,6 +14,7 @@ Once you have Curl installed and configured, use composer to install the Google 
 
 When you register you client app, download it details in json and rename the file to `gmail-xoauth2-credentials.json` or any name you prefer, create another file and name it `gmail-xoauth2-token.json` this will hold the access token after user authorization.
 
+```
 define ( 'APPLICATION_NAME', 'YOUR_APPLICATION NAME' );
 define ( 'APP_CREDENTIALS', 'path_to/gmail-xoauth2-credentials.json' );
 define ( 'CREDENTIALS_PATH', 'path_/gmail-xoauth2-token.json');
@@ -192,7 +193,7 @@ class GmailXOAuth2 {
 	}
 	
 }
-
+```
 <h3>Why must we request for another access token?</h3>
 This is the most crucial/tricky part I found in the Google XOAuth2 mechanism. Remember, we requested for offline access but we received and access token from that.
 However we can't use that very access token to make interaction with the Gmail API in offline access type so we must request for another access token using the <b>refresh token</b> we received.
@@ -204,7 +205,8 @@ Yes, this is possible since you're developing and you may try authorizing your t
 
 Now that you can authorize your application and receive a refresh token, let's handle sending emails using this setup. But before we start sending emails, we must create our custom PHPMailerOAuth class since we are not using the default class that uses League OAuth2 client library.
 
-`class PHPMailerOAuth extends \PHPMailer {
+```
+class PHPMailerOAuth extends \PHPMailer {
 	
     /**
      * The OAuth user's email address
@@ -377,10 +379,12 @@ Now that you can authorize your application and receive a refresh token, let's h
         }
         return false;
     }
-}`
+}
+```
 
 The only difference we have from the original PHPMailerOAuth class is that instead of create an object of the original OAuth class that uses League OAuth2 client library, we now create an object of your custom GmailXOAuth2 class, the rest remains the same...
 
+```
 class Gmail {
 
 	public static function sendMail() {
@@ -481,6 +485,7 @@ class Gmail {
 	}
 	
 }
+```
 
 That is it, so we can now try sending an email
 `Gmail::sendMail();`
