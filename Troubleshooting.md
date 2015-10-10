@@ -1,5 +1,31 @@
-#Troubleshooting connection problems
+#Troubleshooting PHPMailer Problems
 Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
+
+##Loading classes
+###Including the wrong file
+Not so long ago, PHPMailer changed the way that it loaded classes so that it was more compatible with composer, many frameworks, and the [PHP PSR-0 autoloading standard](http://www.php-fig.org/psr/psr-0/). Note that because we support PHP back to version 5.0, we cannot support the more recent [PSR-4 standard](http://www.php-fig.org/psr/psr-4/), nor can we use namespaces. Previously, PHPMailer loaded the SMTP class explicitly, and this causes problems if you want to provide your own implementation. You may have seen old scripts doing this:
+
+```php
+require 'class.phpmailer.php';
+```
+
+If you do only that, **SMTP sending will fail** with a `Class 'SMTP' not found` error. You need to either explicitly include the `class.smtp.php` file, or use the recommended approaches of using composer or the supplied autoloader, like this:
+
+```php
+require 'PHPMailerAutoload.php';
+```
+###Using composer
+[Composer](https://getcomposer.org) saves a huge amount of work - handling package dependencies, updates and downloading, and generates a nice autoloader so you don't have to `require` classes yourself. Loading PHPMailer via composer is the preferred method of using PHPMailer in your project.
+
+It's particularly important if you're using the XOAUTH2 classes sicne they have dependencies that are satisfied by composer. The dependencies are not included by default because they don't work on the older PHP versions that PHP supports, so you will find them in the 'suggest' section of PHPMailer's `composer.json` file. You should copy those dependencies to your own `composer.json`'s `require` section, then `composer install` to load them and add them to the autoloader.
+
+If you don't do this, you're likely to see errors like this:
+
+```php
+Fatal error: Class 'League\OAuth2\Client\Provider\Google' not found in PHPMailer/get_oauth_token.php on line 24
+```
+
+To fix this either configure composer as described, or download this class and all its dependencies and load them manually yourself.
 
 ##"SMTP Error: Could not connect to SMTP host."
 This may also appear as **`SMTP connect() failed`** or **`Called Mail() without being connected`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
@@ -10,19 +36,6 @@ Some techniques to diagnose the source of this error are discussed below.
 
 ##Read the SMTP transcript
 If you set `SMTPDebug = 2` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting.
-
-##Including the wrong file
-Not so long ago, PHPMailer changed the way that it loaded classes so that it was more compatible with composer, many frameworks, and the [PHP PSR-0 autoloading standard](http://www.php-fig.org/psr/psr-0/). Note that because we support PHP back to version 5.0, we cannot support the more recent [PSR-4 standard](http://www.php-fig.org/psr/psr-4/), nor can we use namespaces. Previously, PHPMailer loaded the SMTP class explicitly, and this causes problems if you want to provide your own implementation. You may have seen old scripts doing this:
-
-```php
-require 'class.phpmailer.php';
-```
-
-If you do only that, **SMTP sending will fail** with a `Class 'SMTP' not found` error. You need to either explicitly include the `class.smtp.php` file, or use the recommended approach of using the supplied autoloader (or via composer), like this:
-
-```php
-require 'PHPMailerAutoload.php';
-```
 
 ##DNS failures
 
