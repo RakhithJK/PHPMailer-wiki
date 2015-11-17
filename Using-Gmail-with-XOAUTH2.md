@@ -72,7 +72,7 @@ I have shown the real values used in this example, but this Client ID has now be
 
 ##Configure your email script
 
-In the examples folder you will find a script called `gmail_xoauth.phps` you can use as the basis for this process. How you use PHPMailer remains largely unchanged relative to the other examples; The differences are that it uses the `PHPMailerOAuth` class instead of the simpler `PHPMailer`, and you need to specify the `XOAUTH2` auth type and fill in the authentication values you obtained above.
+In the examples folder you will find a script called `gmail_xoauth.phps` you can use as the basis for this process. How you use PHPMailer remains largely unchanged relative to the other examples; The differences are that it uses the `PHPMailerOAuth` class instead of the simpler `PHPMailer`, and you need to set the `AuthType` property to `XOAUTH2` and fill in the authentication values you obtained above.
 
 Your gmail address goes into `oauthUserEmail` (and will generally need to be the same as your *From* address, though you can also use the **Email address** value that is shown with the Client ID above), **Client ID** goes into `oauthClientId`, **Client secret** into `oauthClientSecret` and the refresh token in `oauthRefreshToken`, like this:
 
