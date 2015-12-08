@@ -102,7 +102,7 @@ $mail->addAttachment($path, $name, $encoding, $type);
 
 ##String Attachments
 
-The `addStringAttachment()` method works just like `addAttachment()`, but you pass the actual contents of the item instead of a fiel system path. The `$filename` parameter is required as it's used to provide a filename for the string data at the receiver end.
+The `addStringAttachment()` method works just like `addAttachment()`, but you pass the actual contents of the item instead of a file system path. The `$filename` parameter is required as it's used to provide a filename for the string data at the receiver end.
 
 It also accepts the same other parameters as described above.
 
