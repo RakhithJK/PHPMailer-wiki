@@ -7,3 +7,5 @@ If you're having trouble getting PHPMailer to work, [read the troubleshooting do
 There is also complete [generated API documentation](http://phpmailer.github.io/PHPMailer/).
 
 To report bugs in PHPMailer, use [the issue tracker](https://github.com/PHPMailer/PHPMailer/issues) and please include code to reproduce your problem. For non-bug questions, [ask questions on stackoverflow.com](http://stackoverflow.com/questions/tagged/phpmailer) and tag them with `PHPMailer`, but please *search first* as there are many, many questions answered already.
+
+Join with HipChat Discussions on https://www.hipchat.com/gJu0G9Xen 
