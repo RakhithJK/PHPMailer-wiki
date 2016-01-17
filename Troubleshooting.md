@@ -90,6 +90,20 @@ If it produces no output or something that doesn't start with `220`, then either
 ##Firewall redirection
 Another thing to look out for here is that the name the mail server responds with should be related to the server you requested, as you can see in the above example - we asked for `smtp.gmail.com` and got `gmail-smtp-msa.l.google.com`, which looks like it's something to do with google - if instead you see something like the name of your ISP, then it could mean that your ISP's firewall is redirecting you transparently to their own mail servers, and you're likely to see authentication failures because you're logging into the wrong server. This is very likely to happen on port 25, but less likely to happen on ports 465 and 587, so it's yet another reason to use encryption!
 
+##SELinux blocking
+If you see an error like `SMTP -> ERROR: Failed to connect to server: Permission denied (13)`, you may be running into SELinux preventing PHP or the web server from sending email. This is particularly likely on RedHat / Fedora / Centos.
+Using the `getsebool` command we can check if the httpd daemon is allowed to make a connection over the network and send an email:
+
+    getsebool httpd_can_sendmail
+    getsebool httpd_can_network_connect
+
+This command will return a boolean on or off. If it's off, we can turn it on:
+
+    sudo setsebool -P httpd_can_sendmail 1
+    sudo setsebool -P httpd_can_network_connect 1
+
+If you're running PHP-FPM via fastcgi, you may need to apply this to the fpm daemon rather than httpd.
+
 ##IPv6 blocking
 Some service providers (including Digital Ocean) provide IPv6 connectivity for servers, but block outbound SMTP over IPv6 while allowing it on IPv4. This can be worked around by setting the `Host` property to an IPv4 address explicitly (the `gethostbyname` function only does IPv4 lookups):
 
