@@ -2,7 +2,7 @@
 
 To learn about PHPMailer, please check out the [code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and [the documentation](https://github.com/PHPMailer/PHPMailer/tree/master/docs) provided with PHPMailer.
 
-If you're having trouble getting PHPMailer to work, [read the troubleshooting documentation](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting).
+If you're having trouble getting PHPMailer to work, read [the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting).
 
 There is also complete [generated API documentation](http://phpmailer.github.io/PHPMailer/).
 
