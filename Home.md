@@ -8,4 +8,4 @@ There is also complete [generated API documentation](http://phpmailer.github.io/
 
 To report bugs in PHPMailer, use [the issue tracker](https://github.com/PHPMailer/PHPMailer/issues) and please include code to reproduce your problem. For non-bug questions, [ask questions on stackoverflow.com](http://stackoverflow.com/questions/tagged/phpmailer) and tag them with `PHPMailer`, but please *search first* as there are many, many questions answered already.
 
-There is (a HipChat channel](https://www.hipchat.com/gJu0G9Xen), but you're unlikely to find anyone in it.
+There is a [HipChat channel](https://www.hipchat.com/gJu0G9Xen), but you're unlikely to find anyone in it.
