@@ -143,6 +143,8 @@ or more succinctly:
 ```php
 $mail->Host = 'tls://smtp.gmail.com:587';
 ```
+
+Don't mix up these modes either; valid combinations are `tls` on port 587 (or possibly 25) and `ssl` on port 465. `ssl` on port 587 or `tls` on port 465 *will not work*.
 ###Opportunistic TLS
 PHPMailer 5.2.10 introduced opportunistic TLS - if it sees that the server is advertising TLS encryption (after you have connected to the server), it enables encryption automatically, even if you have not set `SMTPSecure`. This *might* cause issues if the server is advertising TLS with an invalid certificate, but you can turn it off with `$mail->SMTPAutoTLS = false;`.
 
