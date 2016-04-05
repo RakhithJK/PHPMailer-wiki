@@ -6,7 +6,7 @@ The XOAUTH2 mechanism replaces the usual username and password combination that 
 There is an earlier version of this system called `XOAUTH` (which Gmail also supports), but PHPMailer only supports the more recent `XOAUTH2`.
 
 ###Important!
-The OAuth2 libraries this depends upon require **PHP 5.4 or later**, so you need to be running at least that in order to be able to use this authentication system.
+[The OAuth2 libraries this depends upon](https://packagist.org/packages/league/oauth2-client) require **PHP 5.5 or later**, so you need to be running at least that in order to be able to use this authentication system.
 
 ##Configure an OAuth2 app
 First of all you need to log into your google account using your usual username and password and go to the [developer console](https://console.developers.google.com/project). This will list any existing Google API projects you are using already and allow you to create new ones. Click the "Create Project" button:
