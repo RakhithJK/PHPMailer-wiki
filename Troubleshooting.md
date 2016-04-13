@@ -172,6 +172,82 @@ You can also change these settings globally in your php.ini, but that's a **real
 
 Sometimes this behaviour is not quite so apparent; sometimes encryption failures may appear as the client issuing a `QUIT` immediately after trying to do a `STARTTLS`. If you see that happen, you should check the state of your certificates or verification settings.
 
+##Testing SSL outside PHP
+In order to eliminate PHP config or your code from encryption issues, you can use your local openssl installation to test the config directly using its built-in SMTP client, for example:
+
+    openssl s_client -starttls smtp -crlf -connect smtp.gmail.com:587
+
+You should expect a response like this:
+```
+CONNECTED(00000003)
+depth=2 /C=US/O=GeoTrust Inc./CN=GeoTrust Global CA
+verify error:num=20:unable to get local issuer certificate
+verify return:0
+---
+Certificate chain
+ 0 s:/C=US/ST=California/L=Mountain View/O=Google Inc/CN=smtp.gmail.com
+   i:/C=US/O=Google Inc/CN=Google Internet Authority G2
+ 1 s:/C=US/O=Google Inc/CN=Google Internet Authority G2
+   i:/C=US/O=GeoTrust Inc./CN=GeoTrust Global CA
+ 2 s:/C=US/O=GeoTrust Inc./CN=GeoTrust Global CA
+   i:/C=US/O=Equifax/OU=Equifax Secure Certificate Authority
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIEgDCCA2igAwIBAgIIQKPDG0sroxQwDQYJKoZIhvcNAQELBQAwSTELMAkGA1UE
+BhMCVVMxEzARBgNVBAoTCkdvb2dsZSBJbmMxJTAjBgNVBAMTHEdvb2dsZSBJbnRl
+cm5ldCBBdXRob3JpdHkgRzIwHhcNMTYwNDA3MDkwMzU5WhcNMTYwNjMwMDgyMDAw
+WjBoMQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwN
+TW91bnRhaW4gVmlldzETMBEGA1UECgwKR29vZ2xlIEluYzEXMBUGA1UEAwwOc210
+cC5nbWFpbC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDNsHDL
+zDdAFIunNFHuvBgE3ri8CinYqrPwh8LPhxNo7gnIxSOIASzlBa1xm4uBpInsWJLK
+RxcqjQfGRRki558+ed5L2TrX3uoznEGAsoptatSPDuDaSttHjKX6ZOjbBEAxHp4r
+ozplRFucGma7WkF1XR7htjdofWFCVN/u++Bhp1vJwO9RY2iwywjIVGqY4V9hYGHo
+O0PKJSHTkIPHKZS1hSuM5f2P197cKrQVrFYx2dDMowJlCq8eEf1sp+38UXQEfqjo
+BYNAj29ihiwmvYC/bN+6gZcn+vsR2w77p8tkLLzqY/vZ67Una6Qa+eV4Bl5Kmwwk
+D1C1MDdoHTI8HDl9AgMBAAGjggFLMIIBRzAdBgNVHSUEFjAUBggrBgEFBQcDAQYI
+KwYBBQUHAwIwGQYDVR0RBBIwEIIOc210cC5nbWFpbC5jb20waAYIKwYBBQUHAQEE
+XDBaMCsGCCsGAQUFBzAChh9odHRwOi8vcGtpLmdvb2dsZS5jb20vR0lBRzIuY3J0
+MCsGCCsGAQUFBzABhh9odHRwOi8vY2xpZW50czEuZ29vZ2xlLmNvbS9vY3NwMB0G
+A1UdDgQWBBSEsJM0ANFUgqu5Qc3/VU+gllUUOjAMBgNVHRMBAf8EAjAAMB8GA1Ud
+IwQYMBaAFErdBhYbvPZotXb1gba7Yhq6WoEvMCEGA1UdIAQaMBgwDAYKKwYBBAHW
+eQIFATAIBgZngQwBAgIwMAYDVR0fBCkwJzAloCOgIYYfaHR0cDovL3BraS5nb29n
+bGUuY29tL0dJQUcyLmNybDANBgkqhkiG9w0BAQsFAAOCAQEAhttyyIAjATMjXG03
+kLgoKwHAZQ4ViSe2pt/DEMDUJNXBfJ+v6SI9wBE3QRHz6P/m5LkwoBeOrSiaNsiW
+CrSZiBGFAj6/OBUUciHIPc/dKMYRFZ61wPArXD0VFJBtCV7cBSVvU3aW0YMPoufR
+8UtjlOaTnm7pLqViGRy65EUwztznVe7eIi91X3pKPjg+TkoJmsbRes1ySmeQ06LV
+1cWGd2HMOapOHK+cyQP2Uuo4ZAo5Hgiy9nnDRMmvShT2dKbIv19JyrfXPguZ/E7I
+6z/Z/Fi7ilSrrpx/Frd8XwRCNQJPWfd2cV6NqGLwNR2qSCA0gJaWdIvJYqITw0lL
+cAh6QQ==
+-----END CERTIFICATE-----
+subject=/C=US/ST=California/L=Mountain View/O=Google Inc/CN=smtp.gmail.com
+issuer=/C=US/O=Google Inc/CN=Google Internet Authority G2
+---
+No client certificate CA names sent
+---
+SSL handshake has read 3494 bytes and written 491 bytes
+---
+New, TLSv1/SSLv3, Cipher is AES128-SHA
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+SSL-Session:
+    Protocol  : TLSv1
+    Cipher    : AES128-SHA
+    Session-ID: 936F1A0663F5CE73943C00650C2FB2B9612E1F9819D38A7CD853DB9130D0E5EE
+    Session-ID-ctx:
+    Master-Key: C092C10C71219E0BE8358CD432120D94CA39B01EDDA8A7007B08D7E86A74B6A16B14345610255063E1B0A2DB55D86635
+    Key-Arg   : None
+    Start Time: 1460541074
+    Timeout   : 300 (sec)
+    Verify return code: 0 (ok)
+---
+250 SMTPUTF8
+```
+
+(just type "QUIT" to get out of that). Notice that the verify return code is 0, which indicates successful verification. The `verify error:num=20:unable to get local issuer certificate` is not a problem. You can make the same kind of connection to your own server, or using different ports, though if you connect to port 465 you should skip the `-starttls smtp` option.
+
 ##"Could not instantiate mail function"
 
 This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things:
