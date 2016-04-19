@@ -1,5 +1,5 @@
 #Troubleshooting PHPMailer Problems
-Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
+Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
 
 ##Loading classes
 ###Including the wrong file
@@ -171,6 +171,17 @@ $mail->SMTPOptions = array(
 You can also change these settings globally in your php.ini, but that's a **really** bad idea; PHP 5.6 made this change for very good reasons.
 
 Sometimes this behaviour is not quite so apparent; sometimes encryption failures may appear as the client issuing a `QUIT` immediately after trying to do a `STARTTLS`. If you see that happen, you should check the state of your certificates or verification settings.
+
+##cURL error 60
+You may see the error `cURL error 60: SSL certificate problem: unable to get local issuer certificate`. This may be because your CA file is out of date or missing. You can [download the latest CA cert file from curl](https://curl.haxx.se/ca/cacert.pem), install it somewhere accessible and point at it from your php.ini file with the `openssl.cafile` and `curl.cainfo` properties.
+
+This error can also be caused if your PHP is using a libcurl compiled with libressl (a common option on homebrew) which has [a bug relating to this](https://github.com/libressl-portable/portable/issues/80) instead of the default openssl or OS X's built-in Secure Transport - running `curl -V` will tell you what yours is compiled with, like this:
+
+    curl 7.48.0 (x86_64-apple-darwin15.4.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 libssh2/1.7.0 nghttp2/1.9.2
+
+A standard OS X installation will use Secure Transport:
+
+    curl 7.43.0 (x86_64-apple-darwin15.0) libcurl/7.43.0 SecureTransport zlib/1.2.5
 
 ##Testing SSL outside PHP
 In order to eliminate PHP config or your code from encryption issues, you can use your local openssl installation to test the config directly using its built-in SMTP client, for example:
