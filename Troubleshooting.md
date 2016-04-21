@@ -3,7 +3,7 @@ Whatever problem you're having, first **make sure you are using the [latest PHPM
 
 ##Loading classes
 ###Using composer
-[Composer](https://getcomposer.org) saves a huge amount of work - handling package dependencies, updates and downloading, and generates a nice autoloader so you don't have to `require` classes yourself. **Loading PHPMailer via composer is the preferred method of using PHPMailer in your project**. All you need to do is require the composer autoloader:
+[Composer](https://getcomposer.org) saves a huge amount of work - handling package dependencies, updates and downloading, and generates a nice autoloader so you don't have to `require` classes yourself. **Loading via composer is the preferred method of using PHPMailer in your project**. All you need to do is require the composer autoloader:
 
     require './vendor/autoload.php';
 
