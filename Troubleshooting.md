@@ -27,10 +27,22 @@ Fatal error: Class 'League\OAuth2\Client\Provider\Google' not found in PHPMailer
 
 To fix this either configure composer as described, or download this class and all its dependencies and load them manually yourself.
 
+##Enabling debug output
+If you're using SMTP (i.e. you're calling `isSMTP()`), you can get a detailed transcript of the SMTP conversation using the `SMTPDebug` property. The settings are as follows:
+
+* 1: show client -> server messages only
+* 2: show client -> server and server -> client messages - this is usually the setting you want
+* 3: As 2, but also show details about the initial connection; only use this if you're having trouble connecting (e.g. connection timing out)
+* 4: As 3, but also shows detailed low-level traffic. Only really useful for analysing protocol-level bugs, very verbose, probably not what you need.
+
+Set this option by including a line like this in your script:
+
+    $mail->SMTPDebug = 2;
+
+The output format will adapt itself to command-line or HTML output, though you can override this using the `Debugformat` property.
+
 ##"SMTP Error: Could not connect to SMTP host."
 This may also appear as **`SMTP connect() failed`** or **`Called Mail() without being connected`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
-
-You can get a verbose transcript of the whole SMTP conversation by setting `SMTPDebug = 2` - if you're submitting a bug report that's probably the best option to choose. If you are having trouble with the initial connection, `SMTPDebug = 3` or `4` will give more info, but rather too much if your problem is not related to the connection itself.
 
 Some techniques to diagnose the source of this error are discussed below.
 
