@@ -39,7 +39,7 @@ Set this option by including a line like this in your script:
 
     $mail->SMTPDebug = 2;
 
-The output format will adapt itself to command-line or HTML output, though you can override this using the `Debugformat` property.
+The output format will adapt itself to command-line or HTML output, though you can override this using the `Debugoutput` property.
 
 ##"SMTP Error: Could not connect to SMTP host."
 This may also appear as **`SMTP connect() failed`** or **`Called Mail() without being connected`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
