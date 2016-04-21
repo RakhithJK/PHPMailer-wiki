@@ -1,5 +1,5 @@
 #Troubleshooting PHPMailer Problems
-Whatever problem you're having, first make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer). If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
+Whatever problem you're having, first **make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer)**. If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
 
 ##Loading classes
 ###Including the wrong file
