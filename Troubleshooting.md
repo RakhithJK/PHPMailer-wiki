@@ -2,7 +2,22 @@
 Whatever problem you're having, first **make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer)**. If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
 
 ##Loading classes
-###Including the wrong file
+###Using composer
+[Composer](https://getcomposer.org) saves a huge amount of work - handling package dependencies, updates and downloading, and generates a nice autoloader so you don't have to `require` classes yourself. **Loading PHPMailer via composer is the preferred method of using PHPMailer in your project**. All you need to do is require the composer autoloader:
+
+    require './vendor/autoload.php';
+
+It's particularly important if you're using XOAUTH2 authentication since it requires dependent classes that are satisfied by composer. The dependencies are not included by default because they are not needed by everyone and they don't work on the older PHP versions that PHPMailer supports, so you will find them in the 'suggest' section of PHPMailer's `composer.json` file. You should copy those dependencies to your own `composer.json`'s `require` section, then `composer update` to load them and add them to your autoloader.
+
+If you don't do this, you're likely to see errors like this:
+
+```php
+Fatal error: Class 'League\OAuth2\Client\Provider\Google' not found in PHPMailer/get_oauth_token.php on line 24
+```
+
+To fix this either configure composer as described, or download this class and all its dependencies and load them manually yourself.
+
+###Using PHPMailer's own autoloader
 Not so long ago, PHPMailer changed the way that it loaded classes so that it was more compatible with composer, many frameworks, and the [PHP PSR-0 autoloading standard](http://www.php-fig.org/psr/psr-0/). Note that because we support PHP back to version 5.0, we cannot support the more recent [PSR-4 standard](http://www.php-fig.org/psr/psr-4/), nor can we use namespaces. Previously, PHPMailer loaded the SMTP class explicitly, and this causes problems if you want to provide your own implementation. You may have seen old scripts doing this:
 
 ```php
@@ -14,19 +29,6 @@ If you do only that, **SMTP sending will fail** with a `Class 'SMTP' not found` 
 ```php
 require 'PHPMailerAutoload.php';
 ```
-###Using composer
-[Composer](https://getcomposer.org) saves a huge amount of work - handling package dependencies, updates and downloading, and generates a nice autoloader so you don't have to `require` classes yourself. Loading PHPMailer via composer is the preferred method of using PHPMailer in your project.
-
-It's particularly important if you're using the XOAUTH2 classes sicne they have dependencies that are satisfied by composer. The dependencies are not included by default because they don't work on the older PHP versions that PHP supports, so you will find them in the 'suggest' section of PHPMailer's `composer.json` file. You should copy those dependencies to your own `composer.json`'s `require` section, then `composer install` to load them and add them to the autoloader.
-
-If you don't do this, you're likely to see errors like this:
-
-```php
-Fatal error: Class 'League\OAuth2\Client\Provider\Google' not found in PHPMailer/get_oauth_token.php on line 24
-```
-
-To fix this either configure composer as described, or download this class and all its dependencies and load them manually yourself.
-
 ##Enabling debug output
 If you're using SMTP (i.e. you're calling `isSMTP()`), you can get a detailed transcript of the SMTP conversation using the `SMTPDebug` property. The settings are as follows:
 
