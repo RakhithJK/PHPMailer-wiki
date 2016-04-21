@@ -32,7 +32,7 @@ require 'PHPMailerAutoload.php';
 ##Enabling debug output
 If you're using SMTP (i.e. you're calling `isSMTP()`), you can get a detailed transcript of the SMTP conversation using the `SMTPDebug` property. The settings are as follows:
 
-* 1: show client -> server messages only
+* 1: show client -> server messages only. Don't use this - it's very unlikely to tell you anything useful.
 * 2: show client -> server and server -> client messages - this is usually the setting you want
 * 3: As 2, but also show details about the initial connection; only use this if you're having trouble connecting (e.g. connection timing out)
 * 4: As 3, but also shows detailed low-level traffic. Only really useful for analysing protocol-level bugs, very verbose, probably not what you need.
