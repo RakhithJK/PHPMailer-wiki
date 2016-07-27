@@ -281,6 +281,9 @@ This means that your PHP installation is not configured to call the `mail()` fun
 * Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = '/usr/sbin/sendmail';`).
 * Use `isSMTP()` and send directly using SMTP.
 
+#Addressing
+It's important that you use valid email addresses. Every place that PHPMailer accepts an email address property, it expects an RFC821-format address, **not** an RFC822 one, for example `user@example.com`, **not** `Joe User <user@example.com>`. All the functions that accept an email address, like `addAddress` will return a boolean `true` if the address was accepted. Domain names containing non-ascii chars like `café.com` will use IDN 'punycode' format, which can't be evaluated properly until you ask PHPMailer to `send()`, so errors relating to them will appear later than for regular addresses.
+
 #It's still not working!
 **If any of the above checks fail, PHPMailer will not work either**, and usually there's nothing that PHPMailer can do about it. So go fix your network, then try again. If you are not in control of your own firewall or DNS, you probably need to raise a support ticket with your ISP to fix this (it's very common for them to block or divert port 25 outbound). If they won't fix it, you need to replace your ISP.
 _PS: BlueHost doesn't support smtp.gmail.com, they want you to use their smtp server. The work around would be to use email associated with BlueHost and their host address Or send using mail() function in this case._
