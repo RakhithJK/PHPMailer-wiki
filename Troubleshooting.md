@@ -48,6 +48,21 @@ This may also appear as **`SMTP connect() failed`** or **`Called Mail() without 
 
 Some techniques to diagnose the source of this error are discussed below.
 
+###GoDaddy
+Popular US hosting provider GoDaddy imposes very strict (to the point of becoming almost useless) constraints on sending email. They block outbound SMTP to ports 25, 465 and 587 to all servers except their own. This problem is the subject of many frustrating [questions on Stack Overflow](http://stackoverflow.com/search?q=smtp+godaddy). If you find your script works on your local machine, but not when you upload it to GoDaddy, this will be what's happening to you. The solution is extremely poorly documented by GoDaddy: you **must** send through their servers, and also disable all security features, username and password (great, huh?!), giving you this config for PHPMailer:
+
+```php
+$mail->isSMTP();
+$mail->Host = 'relay-hosting.secureserver.net';
+$mail->Port = 25;
+$mail->SMTPAuth = false;
+$mail->SMTPSecure = false;
+```
+
+GoDaddy also refuses to send with a `From` address belonging to any aol, gmail, yahoo, hotmail, live, aim, or msn domain (see [their docs](https://www.godaddy.com/help/using-cdosys-to-send-email-from-your-windows-hosting-account-1073)). This is because all those domains deploy SPF and DKIM anti-forgery measures, and faking your from address is forgery.
+
+You may find it easier to switch to a more enlightened hosting provider.
+
 ##Read the SMTP transcript
 If you set `SMTPDebug = 2` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting.
 
