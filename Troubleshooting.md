@@ -138,6 +138,8 @@ Some service providers (including Digital Ocean) provide IPv6 connectivity for s
 
     $mail->Host = gethostbyname('smtp.gmail.com');
 
+The only issue with this approach is that you end up asking to connect to an explicit IPv4 address, which will usually cause you to fail certificate name checks. You can disable that (see `SMTPOptions` elsewhere in this doc), but that should be considered a poor workaround - the right solution is to fix your network.
+
 ##Authentication failures
 
 If your authentication is failing, there are several likely causes:
