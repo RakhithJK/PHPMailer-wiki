@@ -37,7 +37,7 @@ Save it as a PHP document in the same directory where you've saved `class.phpmai
 
 This snippet of code is also the start of any use of PHPMailer. `require 'PHPMailerAutoload.php';` loads an autoloader that knows how to load the other classes used by PHPMailer; `$mail = new PHPMailer;` creates a new instance of the class as `$mail`; All features, functions and methods of the class may be accessed via this variable.
 
-Let's go ahead and send out the first mail. For this you'll require the basics: An recipient address, a from address, a subject and the text of the message.
+Let's go ahead and send out the first mail. For this you'll require the basics: A recipient address, a from address, a subject and the text of the message.
 
 You will also need to select a method of delivering the message. We need a program to communicate with an SMTP server which, in turn, sends the mail out to the internet. In the Unix/Linux world, Sendmail is very popular and used widely, but nearly all other mail servers, such as postfix and exim, provide a compatibility wrapper.
 
