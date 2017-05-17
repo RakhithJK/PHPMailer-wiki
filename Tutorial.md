@@ -1,10 +1,10 @@
-#Introduction
+# Introduction
 
 This tutorial describes how to use PHPMailer.
 
 Based on a tutorial by Tom Klingenberg
 
-#Contents
+# Contents
 
 * PHPMailer: What is it? What does it do? Who needs it? Brief examples of PHPMailer's features.
 * First time: Sending your first email with PHPMailer.
@@ -13,7 +13,7 @@ Based on a tutorial by Tom Klingenberg
 * Support: Where do I get help?: How to find support resources: PHPMailer website, mailing list etc.
 * Other Resources: Email and PHP Resources: There is a lot of information in the net about email, php and PHPMailer.
 
-#PHPMailer
+# PHPMailer
 
 PHPMailer is a class library for [PHP](http://php.net/) that provides a collection of functions to build and send email messages. PHPMailer supports several ways of sending email: `mail()`, Sendmail, qmail & direct to SMTP servers. You can use any feature of SMTP-based e-mail, multiple recepients via to, CC, BCC, etc. In short: PHPMailer is an efficient way to send e-mail within PHP.
 
@@ -23,7 +23,7 @@ This tutorial explains how to implement the class in your script or website and 
 
 Because using `mail()` has so many hidden problems, we strongly suggest you don't call it yourself - if you don't want to use PHPMailer, use another established email library such as SwiftMailer, Zend_Mail etc. Almost every code example you will find online using `mail()` (including the PHP documentation for the `mail()` function) has problems that can be avoided by using a library.
 
-#First time
+# First time
 
 Before continuing, please be sure that PHPMailer is installed correctly. If you feel uncertain, please read the installion instructions that accompany the package. If you're still not sure, you can verify that you've installed PHPMailer correctly with this little script:
 
@@ -77,12 +77,12 @@ Setting the subject and body is done next by setting the `Subject` and `Body` pr
 
 Finally, we send out the e-mail, once all necessary information has been provided. This is done with `$mail->Send();`. In this example script, it's inside an `if` statement; if `send()` fails, it'll return `false` and you can catch it and display an error message. This is done in the last lines. Otherwise it displays a success message.
 
-#Using Attachments
+# Using Attachments
 Sending plain-text e-mails is often insufficient. Perhaps you need to attach something to your mail, such as an image or an audio file. Or perhaps you need to attach multiple files.
 
 There are two ways of attaching something to your mail: You can simply attach a file from the filesystem or you can attach (binary) data stored in a variable. The latter is called string attachment. This makes it possible put extract data from a database or web API call and attach it to an e-mail, without ever having to save it as a file.
 
-##File Attachments
+## File Attachments
 
 The command to attach a local file is simply `$mail->addAttachment($path);`, where `$path` contains the path to the file you want to send, and can be placed anywhere between `$mail = new PHPMailer;` and sending the message. Note that *you cannot use a URL for the path* - you may only use local filesystem path. See notes on string attachments below for how to use remote content.
 
@@ -100,7 +100,7 @@ $mail->addAttachment($path, $name, $encoding, $type);
 
 `$type` is the MIME type of the attached file. Content types are defined not necessarily by file suffixes (i.e., `.jpg` or `.mp3`), but a MIME type (MIME = Multipurpose Internet Mail Extensions) is used. This parameter makes it possible change the MIME type of an attachment from the default value of `application/octet-stream` (which works with every kind of file, but means the receiver may not handle it correctly) to a more specific MIME type, such as `image/jpeg` for a JPEG photo, for instance. You don't usually need to set this yourself as PHPMailer will map it from the file extension automatically.
 
-##String Attachments
+## String Attachments
 
 The `addStringAttachment()` method works just like `addAttachment()`, but you pass the actual contents of the item instead of a file system path. The `$filename` parameter is required as it's used to provide a filename for the string data at the receiver end.
 
@@ -156,7 +156,7 @@ This sets the alternative body (`AltBody` for short). If you use this feature, t
 
 Be warned that HTML support varies enormously, but generally you can only use pure HTML - That means no scripts, no Flash, etc. What you can use is documented by the [email standards project](http://www.email-standards.org).
 
-#Support
+# Support
 
 PHPMailer is open source and published under the [LGPL 2.1 license](http://opensource.org/licenses/lgpl-2.1.php). This tutorial covers only the basics - much more is covered by other examples and documentation.
 
