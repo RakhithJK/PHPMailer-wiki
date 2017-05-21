@@ -1,14 +1,14 @@
 PHPMailer 5.2.11 added support for [Google's XOAUTH2](https://developers.google.com/gmail/xoauth2_protocol) SMTP & IMAP authentication mechanism (see [this PR](https://github.com/PHPMailer/PHPMailer/pull/421)). Using it is *very* complicated compared with other auth mechanisms, so this page is here to tell you what you need to do.
 
-##Background
+## Background
 The XOAUTH2 mechanism replaces the usual username and password combination that allows you to authenticate against an SMTP server, which will then allow you to send messages through it. In December 2014 Google made this their preferred method of authenticating for Gmail for both sending and receiving email, and deprecated other systems. If you're not using XOAUTH2, you may experience authentication failures as described in [the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting). You will usually only need to set it up once for your PHP app (not each time you need to send a message), and while it's possible to share the same config across multiple apps, much of the supposed security improvement provided by OAuth stems from using separate client configs for each place you use it, so it's perfectly reasonable to create multiple Client IDs using the process shown below.
 
 There is an earlier version of this system called `XOAUTH` (which Gmail also supports), but PHPMailer only supports the more recent `XOAUTH2`.
 
-###Important!
+### Important!
 [The OAuth2 libraries this depends upon](https://packagist.org/packages/league/oauth2-client) require **PHP 5.5 or later**, so you need to be running at least that in order to be able to use this authentication system.
 
-##Configure an OAuth2 app
+## Configure an OAuth2 app
 First of all you need to log into your google account using your usual username and password and go to the [developer console](https://console.developers.google.com/project). This will list any existing Google API projects you are using already and allow you to create new ones. Click the "Create Project" button:
 
 ![Create project button](images/screen01.png)
@@ -53,7 +53,7 @@ $clientSecret = 'mklHhrns6eF-qjwuiLpSB4DL';
 ```
 The redirect URL needs to be set to point at the script too (yes, it does need to point at itself).
 
-##Fetch the token
+## Fetch the token
 Now paste the script URL into your browser and it will ask you to select which Google ID you want to use (if you have more than one):
 
 ![Select Google ID](images/screen10.png)
@@ -70,7 +70,7 @@ This is what we did all this work for: this value is what you need to perform XO
 
 I have shown the real values used in this example, but this Client ID has now been deleted so it won't work any more (the ability to do this is an OAuth feature) - you must generate your own!
 
-##Configure your email script
+## Configure your email script
 
 In the examples folder you will find a script called `gmail_xoauth.phps` you can use as the basis for this process. How you use PHPMailer remains largely unchanged relative to the other examples; The differences are that it uses the `PHPMailerOAuth` class instead of the simpler `PHPMailer`, and you need to set the `AuthType` property to `XOAUTH2` and fill in the authentication values you obtained above.
 
