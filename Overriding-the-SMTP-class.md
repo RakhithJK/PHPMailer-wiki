@@ -23,3 +23,14 @@ class myMailer extends PHPMailer {
 ```
 
 Now your `myMailer` instance will use your `mySMTP` class. Ideally there should be an SMTP interface file in order to make reimplementations more reliable, but it's not likely you want to do that - though pull requests are always welcome!
+
+# PHPMailer 6.0 alternative
+
+PHPMailer 6.0 adds a method that allows you to inject your own SMTP implementation, so you no longer need to override the PHPMailer class to use a custom SMTP class. It works like this:
+
+```php
+$mail = new PHPMailer;
+$mail->setSMTPInstance(new mySMTP);
+```
+
+Note that the instance you inject must be an instance or a subclass of the `PHPMailer\PHPMailer\SMTP` class.
