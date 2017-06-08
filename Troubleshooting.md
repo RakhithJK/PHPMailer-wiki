@@ -1,8 +1,9 @@
-#Troubleshooting PHPMailer Problems
+# Troubleshooting PHPMailer Problems
+
 Whatever problem you're having, first **make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer)**. If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake.
 
-##Loading classes
-###Using composer
+## Loading classes
+### Using composer
 [Composer](https://getcomposer.org) saves a huge amount of work - handling package dependencies, updates and downloading, and generates a nice autoloader so you don't have to `require` classes yourself. **Loading via composer is the preferred method of using PHPMailer in your project**. All you need to do is require the composer autoloader:
 
     require './vendor/autoload.php';
@@ -17,7 +18,7 @@ Fatal error: Class 'League\OAuth2\Client\Provider\Google' not found in PHPMailer
 
 To fix this either configure composer as described, or download this class and all its dependencies and load them manually yourself.
 
-###Using PHPMailer's own autoloader
+### Using PHPMailer's own autoloader
 Not so long ago, PHPMailer changed the way that it loaded classes so that it was more compatible with composer, many frameworks, and the [PHP PSR-0 autoloading standard](http://www.php-fig.org/psr/psr-0/). Note that because we support PHP back to version 5.0, we cannot support the more recent [PSR-4 standard](http://www.php-fig.org/psr/psr-4/), nor can we use namespaces. Previously, PHPMailer loaded the SMTP class explicitly, and this causes problems if you want to provide your own implementation. You may have seen old scripts doing this:
 
 ```php
@@ -29,7 +30,7 @@ If you do only that, **SMTP sending will fail** with a `Class 'SMTP' not found` 
 ```php
 require 'PHPMailerAutoload.php';
 ```
-##Enabling debug output
+## Enabling debug output
 If you're using SMTP (i.e. you're calling `isSMTP()`), you can get a detailed transcript of the SMTP conversation using the `SMTPDebug` property. The settings are as follows:
 
 * 1: show client -> server messages only. Don't use this - it's very unlikely to tell you anything useful.
@@ -43,12 +44,12 @@ Set this option by including a line like this in your script:
 
 The output format will adapt itself to command-line or HTML output, though you can override this using the `Debugoutput` property.
 
-##"SMTP Error: Could not connect to SMTP host."
+## "SMTP Error: Could not connect to SMTP host."
 This may also appear as **`SMTP connect() failed`** or **`Called Mail() without being connected`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking (for example as GoDaddy does) or other issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
 
 Some techniques to diagnose the source of this error are discussed below.
 
-###GoDaddy
+### GoDaddy
 Popular US hosting provider GoDaddy imposes very strict (to the point of becoming almost useless) constraints on sending email. They block outbound SMTP to ports 25, 465 and 587 to all servers except their own. This problem is the subject of many frustrating [questions on Stack Overflow](http://stackoverflow.com/search?q=smtp+godaddy). If you find your script works on your local machine, but not when you upload it to GoDaddy, this will be what's happening to you. The solution is extremely poorly documented by GoDaddy: you **must** send through their servers, and also disable all security features, username and password (great, huh?!), giving you this config for PHPMailer:
 
 ```php
@@ -63,10 +64,10 @@ GoDaddy also refuses to send with a `From` address belonging to any aol, gmail, 
 
 You may find it easier to switch to a more enlightened hosting provider.
 
-##Read the SMTP transcript
+## Read the SMTP transcript
 If you set `SMTPDebug = 2` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting.
 
-##DNS failures
+## DNS failures
 
 These are often seen as connection timeouts, or "Temporary failure in name resolution", "could not resolve host", "getaddrinfo failed" or similar errors. Check your DNS is working by using the `dig` tool (from the `dnsutils` package on Debian/Ubuntu):
 
@@ -82,7 +83,7 @@ gmail-smtp-msa.l.google.com.
 ```
 If this fails, PHPMailer will not be able to send email because it won't be able to obtain the correct IP address to connect to. If perhaps you don't have a name in DNS, you can use an IP address directly as the hostname. To fix this you need to figure out why your DNS isn't working - perhaps you have not set up your resolvers?
 
-##Check it's there at all
+## Check it's there at all
 
 Even a server with all services disabled will usually respond to simple pings, so if you know that your DNS is ok, check that the server is actually there:
 
@@ -97,7 +98,7 @@ PING gmail-smtp-msa.l.google.com (74.125.133.108): 56 data bytes
 64 bytes from 74.125.133.108: icmp_seq=1 ttl=43 time=68.841 ms
 64 bytes from 74.125.133.108: icmp_seq=2 ttl=43 time=68.500 ms
 ```
-##Check it's a mail server
+## Check it's a mail server
 
 It may be that some other service is running on the SMTP port you are trying to connect to. You can check this using the `telnet` tool, like this (connecting to gmail on its submission service port):
 ```
@@ -116,10 +117,10 @@ Escape character is '^]'.
 
 If it produces no output or something that doesn't start with `220`, then either your server is down or you've got the wrong server.
 
-##Firewall redirection
+## Firewall redirection
 Another thing to look out for here is that the name the mail server responds with should be related to the server you requested, as you can see in the above example - we asked for `smtp.gmail.com` and got `gmail-smtp-msa.l.google.com`, which looks like it's something to do with google - if instead you see something like the name of your ISP, then it could mean that your ISP's firewall is redirecting you transparently to their own mail servers, and you're likely to see authentication failures because you're logging into the wrong server. This is very likely to happen on port 25, but less likely to happen on ports 465 and 587, so it's yet another reason to use encryption!
 
-##SELinux blocking
+## SELinux blocking
 If you see an error like `SMTP -> ERROR: Failed to connect to server: Permission denied (13)`, you may be running into SELinux preventing PHP or the web server from sending email. This is particularly likely on RedHat / Fedora / Centos.
 Using the `getsebool` command we can check if the httpd daemon is allowed to make a connection over the network and send an email:
 
@@ -133,14 +134,14 @@ This command will return a boolean on or off. If it's off, we can turn it on:
 
 If you're running PHP-FPM via fastcgi, you may need to apply this to the fpm daemon rather than httpd.
 
-##IPv6 blocking
+## IPv6 blocking
 Some service providers (including Digital Ocean) provide IPv6 connectivity for servers, but block outbound SMTP over IPv6 while allowing it on IPv4. This can be worked around by setting the `Host` property to an IPv4 address explicitly (the `gethostbyname` function only does IPv4 lookups):
 
     $mail->Host = gethostbyname('smtp.gmail.com');
 
 The only issue with this approach is that you end up asking to connect to an explicit IPv4 address, which will usually cause you to fail certificate name checks. You can disable that (see `SMTPOptions` elsewhere in this doc), but that should be considered a poor workaround - the right solution is to fix your network.
 
-##Authentication failures
+## Authentication failures
 
 If your authentication is failing, there are several likely causes:
 * You have the wrong username or password
@@ -149,13 +150,13 @@ If your authentication is failing, there are several likely causes:
 
 Generally you do not want to send a username or password over an unencrypted link. Some SMTP authentication schemes do add a minimal level of security (sending short hashes rather than clear text), but these provide only minimal protection, and so most servers do not allow authentication without encryption. Fix this by setting `SMTPSecure = 'tls'` and `Port = 587` as well as setting the `Username` and `Password` properties.
 
-###Gmail, OAuth2 and "Allow less secure apps"
+### Gmail, OAuth2 and "Allow less secure apps"
 
 From December 2014, Google started imposing an authentication mechanism called [XOAUTH2](https://developers.google.com/gmail/xoauth2_protocol) based on [OAuth2](http://oauth.net/2/) for access to their apps, including Gmail. This change can break both SMTP and IMAP access to gmail, and you may receive authentication failures (often "5.7.14 Please log in via your web browser") from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others. The error output may include a link to https://support.google.com/mail/bin/answer.py?answer=78754, which gives a list of possible remedies. There are two main solutions to this in PHPMailer:
 * Enabling "[Allow less secure apps](https://support.google.com/accounts/answer/6010255)" will usually solve the problem for PHPMailer, and it does not really make your app significantly less secure. Reportedly, changing this setting may take an hour or more to take effect, so don't expect an immediate fix.
 * PHPMailer added support for XOAUTH2 in version 5.2.11, though **you must be running PHP 5.5 or later** in order to use it. Documentation on how to set it up can be found on [this wiki page](https://github.com/PHPMailer/PHPMailer/wiki/Using-Gmail-with-XOAUTH2).
 
-##Using encryption
+## Using encryption
 There's no doubt that you should use encryption at every opportunity, otherwise you're inviting all kinds of unpleasant possibilities for phishing, identity theft etc.
 
 To use any kind of encryption you need the [`openssl` PHP extension](http://php.net/manual/en/book.openssl.php) enabled. If you don't have it installed, or it's misconfigured, you're likely to have trouble at the `STARTTLS` phase of connections. Check this by looking at the output of `phpinfo()` or `php -i` (look for an 'openssl' section), or `openssl` listed in the output of `php -m`, or run this line of code:
@@ -179,7 +180,7 @@ Don't mix up these modes either; valid combinations are `tls` on port 587 (or po
 ###Opportunistic TLS
 PHPMailer 5.2.10 introduced opportunistic TLS - if it sees that the server is advertising TLS encryption (after you have connected to the server), it enables encryption automatically, even if you have not set `SMTPSecure`. This *might* cause issues if the server is advertising TLS with an invalid certificate, but you can turn it off with `$mail->SMTPAutoTLS = false;`.
 
-##PHP 5.6 certificate verification failure
+## PHP 5.6 certificate verification failure
 In a change from earlier versions, PHP 5.6 verifies certificates on SSL connections. If the SSL config of the server you are connecting to is not correct, you will get an error like this:
 
 ```
@@ -203,7 +204,7 @@ You can also change these settings globally in your php.ini, but that's a **real
 
 Sometimes this behaviour is not quite so apparent; sometimes encryption failures may appear as the client issuing a `QUIT` immediately after trying to do a `STARTTLS`. If you see that happen, you should check the state of your certificates or verification settings.
 
-##cURL error 60
+## cURL error 60
 You may see the error `cURL error 60: SSL certificate problem: unable to get local issuer certificate`. This may be because your CA file is out of date or missing. You can [download the latest CA cert file from curl](https://curl.haxx.se/ca/cacert.pem), install it somewhere accessible and point at it from your php.ini file with the `openssl.cafile` and `curl.cainfo` properties.
 
 This error can also be caused if your PHP is using a libcurl compiled with libressl (a common option on homebrew) which has [a bug relating to this](https://github.com/libressl-portable/portable/issues/80) instead of the default openssl or OS X's built-in Secure Transport - running `curl -V` will tell you what yours is compiled with, like this:
@@ -214,7 +215,7 @@ A standard OS X installation will use Secure Transport:
 
     curl 7.43.0 (x86_64-apple-darwin15.0) libcurl/7.43.0 SecureTransport zlib/1.2.5
 
-##Testing SSL outside PHP
+## Testing SSL outside PHP
 In order to eliminate PHP config or your code from encryption issues, you can use your local openssl installation to test the config directly using its built-in SMTP client, for example:
 
     openssl s_client -starttls smtp -crlf -connect smtp.gmail.com:587
@@ -290,7 +291,7 @@ SSL-Session:
 
 (just type "QUIT" to get out of that). Notice that the verify return code is 0, which indicates successful verification. The `verify error:num=20:unable to get local issuer certificate` is not a problem. You can make the same kind of connection to your own server, or using different ports, though if you connect to port 465 you should skip the `-starttls smtp` option.
 
-##"Could not instantiate mail function"
+## "Could not instantiate mail function"
 
 This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things:
 * Install a local mail server (e.g. postfix).
@@ -298,14 +299,14 @@ This means that your PHP installation is not configured to call the `mail()` fun
 * Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = '/usr/sbin/sendmail';`).
 * Use `isSMTP()` and send directly using SMTP.
 
-#Addressing
+# Addressing
 It's important that you use valid email addresses. Every place that PHPMailer accepts an email address property, it expects an RFC821-format address, **not** an RFC822 one, for example `user@example.com`, **not** `Joe User <user@example.com>`. All the functions that accept an email address, like `addAddress` will return a boolean `true` if the address was accepted. Domain names containing non-ascii chars like `café.com` will use IDN 'punycode' format, which can't be evaluated properly until you ask PHPMailer to `send()`, so errors relating to them will appear later than for regular addresses.
 
-#It's still not working!
+# It's still not working!
 **If any of the above checks fail, PHPMailer will not work either**, and usually there's nothing that PHPMailer can do about it. So go fix your network, then try again. If you are not in control of your own firewall or DNS, you probably need to raise a support ticket with your ISP to fix this (it's very common for them to block or divert port 25 outbound). If they won't fix it, you need to replace your ISP.
 _PS: BlueHost doesn't support smtp.gmail.com, they want you to use their smtp server. The work around would be to use email associated with BlueHost and their host address Or send using mail() function in this case._
 
-#Where else to get help?
+# Where else to get help?
 Several resources are worth checking:
 * [The code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) provided with PHPMailer. Base your code on these, not some ancient example from 2003.
 * [The API docs](http://phpmailer.github.io/PHPMailer/).
