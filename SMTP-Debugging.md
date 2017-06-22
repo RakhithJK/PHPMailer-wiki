@@ -1,5 +1,3 @@
-# SMTP Debugging
-
 If you are having problems connecting or sending emails through your SMTP server, the SMTP class can provide more information about the processing/errors taking place.
 Use the debug functionality of the class to see what's going on in your connections. To do that, set the debug level in your script. For example:
 
