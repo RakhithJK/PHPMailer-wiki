@@ -141,6 +141,8 @@ Some service providers (including Digital Ocean) provide IPv6 connectivity for s
 
 The only issue with this approach is that you end up asking to connect to an explicit IPv4 address, which will usually cause you to fail certificate name checks. You can disable that (see `SMTPOptions` elsewhere in this doc), but that should be considered a poor workaround - the right solution is to fix your network.
 
+Note : When using the Digital Ocean service check if your SMTP port is actually unlocked, as it is a US based company it contains a series of directives not to fall into span, so you should ask for the unlock and follow steps to confirm with Digital Ocean the Purpose of sending your emails with PhpMailer.
+
 ## Authentication failures
 
 If your authentication is failing, there are several likely causes:
