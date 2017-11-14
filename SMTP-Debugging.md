@@ -19,7 +19,7 @@ Setting the `PHPMailer->SMTPDebug` property to these numbers or constants (defin
  * `SMTP::DEBUG_OFF` (`0`): Disable debugging (you can also leave this out completely, 0 is the default).
  * `SMTP::DEBUG_CLIENT` (`1`): Output messages sent by the client.
  * `SMTP::DEBUG_SERVER` (`2`): as 1, plus responses received from the server (this is the most useful setting).
- * `SMTP::DEBUG_CONNECTION` (`3`): as 2, plus more information about the initial connection.
+ * `SMTP::DEBUG_CONNECTION` (`3`): as 2, plus more information about the initial connection - this level can help diagnose STARTTLS failures.
  * `SMTP::DEBUG_LOWLEVEL` (`4`): as 3, plus even lower-level information, very verbose, don't use for debugging SMTP, only low-level problems.
 
 You don't need to use levels above 2 unless you're having trouble connecting at all - it will just make output more verbose and more difficult to read.
