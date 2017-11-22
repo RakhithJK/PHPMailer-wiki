@@ -1,0 +1,1 @@
+在配置163邮箱时提示：#SMTP connect() failed. https://github.com/PHPMa_# # _iler/PHPMailer/wiki/Troubleshooting。我不太懂这是什么意思，能不能帮我解决一下
