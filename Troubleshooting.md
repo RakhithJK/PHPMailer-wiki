@@ -208,7 +208,7 @@ You may not see this error; In implicit encryption mode (SMTPS) it may be hidden
 
 There are three likely explanations and solutions for this error:
 
-1. The server is publishing a bad, self-signed, or expired certificate - fix by replacing the certificate on your mail server. If you don't have access, ask whoever the admin is.
+1. The server is publishing a bad, self-signed, or expired certificate - fix by replacing the certificate on your mail server. If you don't have access, ask whoever the admin is. You can run [some diagnostic tests](https://ssl-tools.net/mailservers) which will tell you whether the problem is at your end (if the tests pass) or the mail server's.
 1. Your ISP is transparently redirecting your SMTP traffic to a different server - this is effectively a man-in-the-middle attack and is exactly the kind of thing that TLS is designed to protect you from. An appropriate fix here is to use your ISP's server explicitly - this is especially true for GoDaddy - but you may find this interferes with your ability to use some *from* addresses, especially if you're using common hosts like Gmail or Yahoo.
 1. Your operating system or PHP configuration is using an out of date CA (certificate authority) certificate file, preventing it being able to verify a perfectly valid certificate from the server.
 
