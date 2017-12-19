@@ -212,11 +212,46 @@ There are three likely explanations and solutions for this error:
 1. Your ISP is transparently redirecting your SMTP traffic to a different server - this is effectively a man-in-the-middle attack and is exactly the kind of thing that TLS is designed to protect you from. An appropriate fix here is to use your ISP's server explicitly - this is especially true for GoDaddy - but you may find this interferes with your ability to use some *from* addresses, especially if you're using common hosts like Gmail or Yahoo.
 1. Your operating system or PHP configuration is using an out of date CA (certificate authority) certificate file, preventing it being able to verify a perfectly valid certificate from the server.
 
-### Updating CA certificates
-To update your CA certificates, make sure your operating system is fully up to date - CA certs are usually updated via OS updates. Alternatively, you can [download the latest CA cert file from curl](https://curl.haxx.se/ca/cacert.pem), install it somewhere accessible (for example `/etc/ssl/private/ca-certs.pem`) and point at it from the `openssl.cafile` and `curl.cainfo` directives in your php.ini file (this location will vary according to your OS and PHP config; where you need to put it is beyond the scope of PHPMailer!):
+### Checking CA certificates
+First of all find out where your PHP instance gets its CA certificates from:
 
-    openssl.cafile = /etc/ssl/private/ca-certs.pem
-    curl.cainfo = /etc/ssl/private/ca-certs.pem
+    php -i | grep cafile
+    openssl.cafile => /etc/ssl/cacert.pem => /etc/ssl/cacert.pem
+
+Your location may be different, or not specified manually in your PHP config. If it's empty, it means it's relying on your OS default locations for CA certificates, and you'll need to consult your OS docs to find out where they are kept.
+
+Ask openssl to test the connection using whatever CA cert bundle path you're using in the `CAfile` parameter:
+
+    echo QUIT | openssl s_client -crlf -starttls smtp -CAfile /etc/ssl/cacert.pem -connect smtp.gmail.com:587
+
+A successful result will look like this, where the `verify return` values are all `1`:
+
+```
+CONNECTED(00000003)
+depth=2 OU = GlobalSign Root CA - R2, O = GlobalSign, CN = GlobalSign
+verify return:1
+depth=1 C = US, O = Google Trust Services, CN = Google Internet Authority G3
+verify return:1
+depth=0 C = US, ST = California, L = Mountain View, O = Google Inc, CN = smtp.gmail.com
+verify return:1
+---
+Certificate chain
+ 0 s:/C=US/ST=California/L=Mountain View/O=Google Inc/CN=smtp.gmail.com
+   i:/C=US/O=Google Trust Services/CN=Google Internet Authority G3
+ 1 s:/C=US/O=Google Trust Services/CN=Google Internet Authority G3
+   i:/OU=GlobalSign Root CA - R2/O=GlobalSign/CN=GlobalSign
+```
+A bad result (suggesting you need to update or relocate your CA certs) would be:
+```
+CONNECTED(00000003)
+depth=1 C = US, O = Google Trust Services, CN = Google Internet Authority G3
+verify error:num=20:unable to get local issuer certificate
+```
+### Updating CA certificates
+To update your CA certificates, make sure your operating system is fully up to date - CA certs are usually updated via OS updates. Alternatively, you can [download the latest CA cert file from curl](https://curl.haxx.se/ca/cacert.pem), install it somewhere accessible (for example `/etc/ssl/cacert.pem`) and point at it from the `openssl.cafile` and `curl.cainfo` directives in your php.ini file (this location will vary according to your OS and PHP config; where you need to put it is beyond the scope of PHPMailer!):
+
+    openssl.cafile = /etc/ssl/cacert.pem
+    curl.cainfo = /etc/ssl/cacert.pem
 
 Failing that, you can allow **insecure** connections via the `SMTPOptions` property introduced in PHPMailer 5.2.10 (it's possible to do this by [subclassing the SMTP class](https://github.com/PHPMailer/PHPMailer/wiki/Overriding-the-SMTP-class) in earlier versions), though this is **not recommended** as it defeats much of the point of using a secure transport at all:
 
@@ -246,11 +281,11 @@ A standard OS X installation will use Secure Transport:
 ## Testing SSL outside PHP
 In order to eliminate PHP config or your code from encryption issues, you can use your local openssl installation to test the config directly using its built-in SMTP client, for example to test an explicit SMTP+STARTTLS config:
 
-    openssl s_client -starttls smtp -crlf -connect smtp.gmail.com:587
+    echo QUIT | openssl s_client -starttls smtp -crlf -connect smtp.gmail.com:587
 
 or (if you're using implicit SSL on port 465)
 
-    openssl s_client -connect smtp.gmail.com:465
+    echo QUIT | openssl s_client -connect smtp.gmail.com:465
 
 Of course this doesn't have to be gmail's server - you can substitute any mail server name in these commands.
 
