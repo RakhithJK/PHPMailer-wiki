@@ -88,7 +88,7 @@ There are two ways of attaching something to your mail: You can simply attach a 
 
 The command to attach a local file is simply `$mail->addAttachment($path);`, where `$path` contains the path to the file you want to send, and can be placed anywhere between `$mail = new PHPMailer;` and sending the message. Note that *you cannot use a URL for the path* - you may only use local filesystem path. See notes on string attachments below for how to use remote content.
 
-The $path be a relative one (from your script, not the PHPMailer class) or a full path to the file you want to attach. If you want to send content from a database or web API (e.g. a remote PDF generator), do not use this method - use `addStringAttachment` instead.
+The $path may be a relative one (from your script, not the PHPMailer class) or a full path to the file you want to attach. If you want to send content from a database or web API (e.g. a remote PDF generator), do not use this method - use `addStringAttachment` instead.
 
 If you want more options or you want to specify encoding and the MIME type of the file, then you can use three more parameters, all of which are optional:
 
