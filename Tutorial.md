@@ -82,7 +82,7 @@ Finally, we send out the e-mail, once all necessary information has been provide
 # Using Attachments
 Sending plain-text e-mails is often insufficient. Perhaps you need to attach something to your mail, such as an image or an audio file. Or perhaps you need to attach multiple files.
 
-There are two ways of attaching something to your mail: You can simply attach a file from the filesystem or you can attach (binary) data stored in a variable. The latter is called string attachment. This makes it possible put extract data from a database or web API call and attach it to an e-mail, without ever having to save it as a file.
+There are two ways of attaching something to your mail: You can simply attach a file from the filesystem or you can attach (binary) data stored in a variable. The latter is called string attachment. This makes it possible to extract data from a database or web API call and attach it to an e-mail, without ever having to save it as a file.
 
 ## File Attachments
 
