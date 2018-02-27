@@ -175,6 +175,6 @@ There's an enormous amount of other information available about e-mail, PHP and 
 * PHP [`mail()` function reference](http://www.php.net/mail)
 * The [email standards project](http://www.email-standards.org) (about client support for HTML messages)
 * Many email standards are applicable to PHPMailer, including:
-  * Email [RFC5322](http://www.ietf.org/html/rfc5322)
+  * Email [RFC5322](http://tools.ietf.org/html/rfc5322)
   * SMTP [RFC5321](https://tools.ietf.org/html/rfc5321)
-  * MIME RFCs [2045](http://www.ietf.org/html/rfc2045), [2046](http://www.ietf.org/html/rfc2046), [2047](http://www.ietf.org/html/rfc2047)
+  * MIME RFCs [2045](http://tools.ietf.org/html/rfc2045), [2046](http://tools.ietf.org/html/rfc2046), [2047](http://tools.ietf.org/html/rfc2047)
