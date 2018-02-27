@@ -253,6 +253,8 @@ To update your CA certificates, make sure your operating system is fully up to d
     openssl.cafile = /etc/ssl/cacert.pem
     curl.cainfo = /etc/ssl/cacert.pem
 
+A highly recommended alternative is to use the [Certainty](https://packagist.org/packages/paragonie/certainty) package which ensures that you always have the latest CA cert bundle.
+
 Failing that, you can allow **insecure** connections via the `SMTPOptions` property introduced in PHPMailer 5.2.10 (it's possible to do this by [subclassing the SMTP class](https://github.com/PHPMailer/PHPMailer/wiki/Overriding-the-SMTP-class) in earlier versions), though this is **not recommended** as it defeats much of the point of using a secure transport at all:
 
 ```php
