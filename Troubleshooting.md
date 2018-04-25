@@ -1,0 +1,1 @@
+Found this wiki blank, will open an issue.  In the meantime, a cached version from February 2018 can be found at [archive.org](https://web.archive.org/web/20180226173859/https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting).
