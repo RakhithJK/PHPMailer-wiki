@@ -361,6 +361,6 @@ It's important that you use valid email addresses. Every place that PHPMailer ac
 Several resources are worth checking:
 * [The code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) provided with PHPMailer. Base your code on these, not some ancient example from 2003.
 * [The API docs](http://phpmailer.github.io/PHPMailer/).
-* [The code itself](https://github.com/PHPMailer/PHPMailer/blob/master/class.phpmailer.php) - it's very well commented.
+* [The code itself](https://github.com/PHPMailer/PHPMailer/blob/master/src/PHPMailer.php) - it's very well commented.
 * [The issue tracker](https://github.com/PHPMailer/PHPMailer/issues) - it's very likely a problem similar to yours has happened before, so **search in there** _before_ opening a ticket. If you do create an issue, be sure to include your code, preferably the minimum necessary to reproduce or define the problem so that we have a chance to see what you're seeing - saying "It doesn't work" is not a bug report!
 * [StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer) - there are a ton of PHPMailer questions on there, the vast majority of which could be fixed by reading this page! **Search the questions** for the error message you're seeing **before** posting a question. If you post a question on SO, make sure you tag it as `PHPMailer` so that we will see it and **please don't** open an issue here as well. The issue tracker here is intended for actual bugs in PHPMailer, not problems with your server.
