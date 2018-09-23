@@ -4,6 +4,8 @@ This tutorial describes how to use PHPMailer.
 
 **Note that this tutorial is based on an old version of PHPMailer, and parts of it no longer work the same way with PHPMailer 6.0. Please refer to the readme file.**
 
+There is [a very nice tutorial on PHPMailer 6 written by Alessandro Castellano](https://alexwebdevelop.com/phpmailer-tutorial/).
+
 Based on a tutorial by Tom Klingenberg
 
 # Contents
