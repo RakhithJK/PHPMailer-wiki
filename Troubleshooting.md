@@ -159,7 +159,7 @@ From December 2014, Google started imposing an authentication mechanism called [
 ## Using encryption
 You should use encryption at every opportunity, otherwise you're inviting all kinds of unpleasant possibilities for phishing, identity theft, eavesdropping, stolen credentials etc.
 
-PHPMailer uses TLS encryption; TLS is simply the "new" (since 1998!) name for SSL. The two names are essentially interchangeable.
+PHPMailer uses TLS encryption; TLS is simply the "new" (since 1998!) name for SSL. The two names are interchangeable.
 
 The TLS / SSL config you use for email has nothing to do with any certificate you may use on your web site; you can still use encrypted email even if your site does not have a certificate.
 
@@ -172,9 +172,9 @@ To use any kind of encryption you need the [`openssl` PHP extension](http://php.
 ### Encryption flavours
 There are two "flavours" of transport encryption available for email:
 * "SMTPS", also referred to as "implicit" because it assumes that you're going to be using encryption right from the start of the connection. In PHPMailer this mode is selected by setting `SMTPSecure = 'ssl'`, and usually requires `Port = 465`.
-* "SMTP+STARTTLS", also referred to as "explicit" because it initially connects insecurely then explicitly asks for the connection to start using encryption. In PHPMailer this mode is selected by setting `SMTPSecure = 'tls'`, and usually requires `Port = 587`, though it can work on any port.
+* "SMTP+STARTTLS", also referred to as "explicit" because it initially connects _insecurely_ then explicitly asks for the connection to start using encryption. In PHPMailer this mode is selected by setting `SMTPSecure = 'tls'`, and usually requires `Port = 587` (defined in [RFC6409](https://tools.ietf.org/html/rfc6409)), though it can work on any port.
 
-SMTPS on port 465 has officially been [deprecated since 1998](http://en.wikipedia.org/wiki/SMTPS) and was only used by Microsoft products that didn't get the memo; the standards recommend using SMTP+STARTTLS on port 587 instead. However, SMTPS on port 465 is about to become a recommended solution again.
+SMTPS on port 465 [deprecated in 1998](http://en.wikipedia.org/wiki/SMTPS) and was mostly only used by Microsoft; the standards recommended using SMTP+STARTTLS on port 587 instead. However, SMTPS on port 465 become a recommended solution again in 2018 in [RFC8314](https://tools.ietf.org/html/rfc8314).
 
 ```php
 $mail->SMTPSecure = 'tls';
