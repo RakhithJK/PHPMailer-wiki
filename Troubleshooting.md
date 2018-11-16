@@ -49,6 +49,8 @@ The output format will adapt itself to command-line or HTML output, though you c
 ## "SMTP Error: Could not connect to SMTP host."
 This may also appear as **`SMTP connect() failed`** or **`Called Mail() without being connected`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking (for example as GoDaddy does) or another issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
 
+The problem can also be caused by Avast Business who is blocking PHPMailer (during development).
+
 Some techniques to diagnose the source of this error are discussed below.
 
 ### GoDaddy
