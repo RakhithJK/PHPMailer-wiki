@@ -353,6 +353,8 @@ This means that your PHP installation is not configured to call the `mail()` fun
 * Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = '/usr/sbin/sendmail';`).
 * Use `isSMTP()` and send directly using SMTP.
 
+If you also see the message `More than one "from" person`, it's likely that your php.ini's `sendmail_path` property already contains a `-f` parameter, and so your code is trying to add a second envelope sender, which is not allowed.
+
 # Addressing
 It's important that you use valid email addresses. Every place that PHPMailer accepts an email address property, it expects an RFC821-format address, **not** an RFC822 one, for example `user@example.com`, **not** `Joe User <user@example.com>`. All the functions that accept an email address, like `addAddress` will return a boolean `true` if the address was accepted. Domain names containing non-ascii chars like `café.com` will use IDN 'punycode' format, which can't be evaluated properly until you ask PHPMailer to `send()`, so errors relating to them will appear later than for regular addresses.
 
