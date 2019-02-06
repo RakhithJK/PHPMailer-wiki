@@ -249,6 +249,11 @@ CONNECTED(00000003)
 depth=1 C = US, O = Google Trust Services, CN = Google Internet Authority G3
 verify error:num=20:unable to get local issuer certificate
 ```
+
+The OpenSSL output is not especially easy to read - you may find that [testssl.sh](https://testssl.sh) is better. Run it like this:
+
+    ./testssl.sh --starttls smtp smtp.gmail.com:587
+
 ### Updating CA certificates
 To update your CA certificates, make sure your operating system is fully up to date - CA certs are usually updated via OS updates. Alternatively, you can [download the latest CA cert file from curl](https://curl.haxx.se/ca/cacert.pem), install it somewhere accessible (for example `/etc/ssl/cacert.pem`) and point at it from the `openssl.cafile` and `curl.cainfo` directives in your php.ini file (this location will vary according to your OS and PHP config; where you need to put it is beyond the scope of PHPMailer!):
 
