@@ -352,11 +352,11 @@ SSL-Session:
 
 ## "Could not instantiate mail function"
 
-This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things:
+This means that your PHP installation is not configured to call the `mail()` function correctly (e.g. `sendmail_path` is not set correctly in your `php.ini`), or you have no local mail server installed and configured. To fix this you need to do one or more of these things (in order of preference):
+* Ideally, use `isSMTP()` and send directly using SMTP; it's faster, safer, and easier to debug than using `mail()`.
 * Install a local mail server (e.g. postfix).
 * Ensure that your `sendmail_path` points at the sendmail binary (usually `/usr/sbin/sendmail`) in your `php.ini`. Note that on Ubuntu/Debian you may have multiple `.ini` files in `/etc/php5/mods-available` and possibly other locations.
-* Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = '/usr/sbin/sendmail';`).
-* Use `isSMTP()` and send directly using SMTP.
+* Use `isSendmail()` and set the path to the sendmail binary in PHPMailer (`$mail->Sendmail = '/usr/sbin/sendmail';`). It's very unlikely this option is appropriate; evaluate other solutions first.
 
 If you also see the message `More than one "from" person`, it's likely that your php.ini's `sendmail_path` property already contains a `-f` parameter, and so your code is trying to add a second envelope sender, which is not allowed.
 
