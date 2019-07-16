@@ -58,10 +58,10 @@ Popular US hosting provider GoDaddy imposes very strict (to the point of becomin
 
 ```php
 $mail->isSMTP();
-$mail->Host = 'relay-hosting.secureserver.net';
-$mail->Port = 25;
+$mail->Host = 'localhost';
 $mail->SMTPAuth = false;
-$mail->SMTPSecure = false;
+$mail->SMTPAutoTLS = false; 
+$mail->Port = 25; 
 ```
 
 GoDaddy also refuses to send with a `From` address belonging to any aol, gmail, yahoo, hotmail, live, aim, or msn domain (see [their docs](https://www.godaddy.com/help/using-cdosys-to-send-email-from-your-windows-hosting-account-1073)). This is because all those domains deploy SPF and DKIM anti-forgery measures, and faking your from address is forgery.
