@@ -14,9 +14,9 @@ $mail ->SMTPSecure = 'ssl';
 $mail ->Host = "smtp.gmail.com";
 $mail -> Port =465; // 587
 $mail ->isHTML(true);
-$mail -> Username = "weiyangtan1999@gmail.com";
-$mail ->Password = "9902207353";
-$mail ->setFrom("weiyangtan1999@gmail.com");
+$mail -> Username = "test@gmail.com";
+$mail ->Password = "testpwd";
+$mail ->setFrom("test@gmail.com");
 $mail -> Subject = $mailSub;
 $mail ->Body = $mailSub;
 $mail ->addAddress($mailto);
