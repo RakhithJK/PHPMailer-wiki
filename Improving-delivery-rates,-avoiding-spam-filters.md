@@ -5,7 +5,7 @@ If you find your messages are being classified as spam or being rejected outrigh
 There are several sources of information about message delivery:
 1. Your mail server's logs will show details of immediate rejections, so look there if messages are not arriving at all.
 1. Bounce messages - if a message is accepted and later rejected, it will generate a bounce message. Ensure that your mail server is set to forward these to somewhere you can see them, or pipes them into a script to be processed.
-1. Message headers - if a message arrives in a spam filter, the receiving server will usually add headers telling you why it ended up there. Most email clients have the ability to view the raw message source: in Apple Mail, select View -> Message -> All Headers. In gmail select "Show original" from the message menu; this view also reports other useful details that are relevant to the items discussed below.
+1. Message headers - if a message arrives in a spam folder, the receiving server will usually add headers telling you why it ended up there. Most email clients have the ability to view the raw message source: in Apple Mail, select View -> Message -> All Headers. In gmail select "Show original" from the message menu; this view also reports other useful details that are relevant to the items discussed below.
 1. Postmaster tools. Some large ISPs, such as [gmail](https://postmaster.google.com/) and [hotmail](https://sendersupport.olc.protection.outlook.com/snds/), provide services to help senders identify sources of problem email. Unfortunately gmail's tools are extremely poor and unreliable.
 
 # Causes of rejection and spam filtering
