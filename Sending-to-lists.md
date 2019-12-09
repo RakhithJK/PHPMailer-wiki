@@ -20,3 +20,7 @@ If you are sending to localhost, don't use authentication or encryption as the o
 Generally sending directly to end users is to be avoided. The SMTP client in PHPMailer is not an MTA - it does not handle queuing at all, so any domains with greylisting or delivery deferrals for traffic control (in particular Yahoo) will fail to be delivered. The best approach is to use SMTP to a nearby MTA and leave the queue handling to that. You can get bounces back from that as well so you can remove bad addresses from your list.
 
 You should make sure you have a local caching DNS - `dnsmasq` on Linux is a great choice.
+
+## Performance Improvements on Windows systems
+
+PHP on Windows may suffer from a 3-12 second delay when sending emails to a remote SMTP server. This is due to delay verifying the SSL certificate when sending over an encrypted SSL/STARTTLS connection. See more details and solution [here](https://github.com/PHPMailer/PHPMailer/issues/1911).
