@@ -151,7 +151,7 @@ If your authentication is failing, there are several likely causes:
 * Your connection is being diverted to a different server (as above)
 * You have specified authentication without encryption
 
-Generally, you do not want to send a username or password over an unencrypted link. Some SMTP authentication schemes do add a minimal level of security (sending short hashes rather than clear text), but these provide only minimal protection, and so most servers do not allow authentication without encryption. Fix this by setting `SMTPSecure = 'tls'` and `Port = 587` as well as setting the `Username` and `Password` properties.
+Generally, you do not want to send a username or password over an unencrypted link. Some SMTP authentication schemes do add a minimal level of security (sending short hashes rather than clear text), but these provide only minimal protection, and so most servers do not allow authentication without encryption. Fix this by setting `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS` and `Port = 587` as well as setting the `Username` and `Password` properties.
 
 ### Gmail, OAuth2 and "Allow less secure apps"
 From December 2014, Google started imposing an authentication mechanism called [XOAUTH2](https://developers.google.com/gmail/xoauth2_protocol) based on [OAuth2](http://oauth.net/2/) for access to their apps, including Gmail. This change can break both SMTP and IMAP access to Gmail, and you may receive authentication failures (often "5.7.14 Please log in via your web browser and then try again" or "Username and Password not accepted") from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others. The error output may include a link to https://support.google.com/mail/bin/answer.py?answer=78754, which gives a list of possible remedies, or https://support.google.com/mail/?p=BadCredentials, which is largely unhelpful. There are two main solutions to this in PHPMailer:
@@ -174,27 +174,23 @@ To use any kind of encryption you need the [`openssl` PHP extension](http://php.
 
 ### Encryption flavours
 There are two "flavours" of transport encryption available for email:
-* "SMTPS", also referred to as "implicit" because it assumes that you're going to be using encryption right from the start of the connection. In PHPMailer this mode is selected by setting `SMTPSecure = 'ssl'`, and usually requires `Port = 465`.
-* "SMTP+STARTTLS", also referred to as "explicit" because it initially connects _insecurely_ then explicitly asks for the connection to start using encryption. In PHPMailer this mode is selected by setting `SMTPSecure = 'tls'`, and usually requires `Port = 587` (defined in [RFC6409](https://tools.ietf.org/html/rfc6409)), though it can work on any port.
+* "SMTPS", also referred to as "implicit" because it assumes that you're going to be using encryption right from the start of the connection. In PHPMailer this mode is selected by setting `SMTPSecure = PHPMailer::ENCRYPTION_SMTPS` (or `'ssl'`), and usually requires `Port = 465`.
+* "SMTP+STARTTLS", also referred to as "explicit" because it initially connects _insecurely_ then explicitly asks for the connection to start using encryption. In PHPMailer this mode is selected by setting `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS` (or `'tls'`), and usually requires `Port = 587` (defined in [RFC6409](https://tools.ietf.org/html/rfc6409)), though it can work on any port.
 
 SMTPS on port 465 [deprecated in 1998](http://en.wikipedia.org/wiki/SMTPS) and was mostly only used by Microsoft; the standards recommended using SMTP+STARTTLS on port 587 instead. However, SMTPS on port 465 become a recommended solution again in 2018 in [RFC8314](https://tools.ietf.org/html/rfc8314).
 
 ```php
-$mail->SMTPSecure = 'tls';
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Host = 'smtp.gmail.com';
 $mail->Port = 587;
-//or more succinctly:
-$mail->Host = 'tls://smtp.gmail.com:587';
 ```
 **or**
 ```php
-$mail->SMTPSecure = 'ssl';
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 $mail->Host = 'smtp.gmail.com';
 $mail->Port = 465;
-//or more succinctly:
-$mail->Host = 'ssl://smtp.gmail.com:465';
 ```
-**Don't mix up these modes**; `ssl` on port 587 or `tls` on port 465 **will not work**.
+**Don't mix up these modes**; `SMTPS` on port 587 or `SMTP_STARTTLS` on port 465 **will not work**.
 
 ### Opportunistic TLS
 PHPMailer 5.2.10 introduced opportunistic TLS - if it sees that the server is advertising TLS encryption (after you have connected to the server), it enables encryption automatically, even if you have not set `SMTPSecure`. This *might* cause issues if the server is advertising TLS with an invalid certificate, but you can turn it off with `$mail->SMTPAutoTLS = false;`.
