@@ -35,16 +35,17 @@ require 'PHPMailerAutoload.php';
 ## Enabling debug output
 If you're using SMTP (i.e. you're calling `isSMTP()`), you can get a detailed transcript of the SMTP conversation using the `SMTPDebug` property. The settings are as follows:
 
-* 1: show client -> server messages only. Don't use this - it's very unlikely to tell you anything useful.
-* 2: show client -> server and server -> client messages - this is usually the setting you want
-* 3: As 2, but also show details about the initial connection; only use this if you're having trouble connecting (e.g. connection timing out)
-* 4: As 3, but also shows detailed low-level traffic. Only really useful for analyzing protocol-level bugs, very verbose, probably not what you need.
+* `SMTP::DEBUG_OFF` (0): Normal production setting; no debug output.
+* `SMTP::DEBUG_CLIENT` (1): show client -> server messages only. Don't use this - it's very unlikely to tell you anything useful.
+* `SMTP::DEBUG_SERVER` (2): show client -> server and server -> client messages - this is usually the setting you want
+* `SMTP::DEBUG_CONNECTION` (3): As 2, but also show details about the initial connection; only use this if you're having trouble connecting (e.g. connection timing out)
+* `SMTP::DEBUG_LOWLEVEL` (4): As 3, but also shows detailed low-level traffic. Only really useful for analyzing protocol-level bugs, very verbose, probably not what you need.
 
 Set this option by including a line like this in your script:
 
-    $mail->SMTPDebug = 2;
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 
-The output format will adapt itself to command-line or HTML output, though you can override this using the `Debugoutput` property.
+The output format will adapt itself to command-line or HTML output, though you can override this using the `Debugoutput` property. If you are using authentication, user IDs and passwords will be redacted in the debug output *except* when you use `SMTP::DEBUG_LOWLEVEL` (4).
 
 ## "SMTP Error: Could not connect to SMTP host."
 This may also appear as **`SMTP connect() failed`** or **`Called Mail() without being connected`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking (for example as GoDaddy does) or another issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
@@ -67,7 +68,7 @@ $mail->Port = 25;
 GoDaddy also refuses to send with a `From` address belonging to any aol, gmail, yahoo, hotmail, live, aim, or msn domain (see [their docs](https://www.godaddy.com/help/using-cdosys-to-send-email-from-your-windows-hosting-account-1073)). This is because all those domains deploy SPF and DKIM anti-forgery measures, and faking your from address is forgery.
 
 ## Read the SMTP transcript
-If you set `SMTPDebug = 2` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting.
+If you set `SMTPDebug = SMTP::DEBUG_SERVER` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting.
 
 ## DNS failures
 These are often seen as connection timeouts, or "Temporary failure in name resolution", "could not resolve host", "getaddrinfo failed" or similar errors. Check your DNS is working by using the `dig` tool (from the `dnsutils` package on Debian/Ubuntu):
@@ -155,7 +156,7 @@ Generally, you do not want to send a username or password over an unencrypted li
 
 ### Gmail, OAuth2 and "Allow less secure apps"
 From December 2014, Google started imposing an authentication mechanism called [XOAUTH2](https://developers.google.com/gmail/xoauth2_protocol) based on [OAuth2](http://oauth.net/2/) for access to their apps, including Gmail. This change can break both SMTP and IMAP access to Gmail, and you may receive authentication failures (often "5.7.14 Please log in via your web browser and then try again" or "Username and Password not accepted") from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others. The error output may include a link to https://support.google.com/mail/bin/answer.py?answer=78754, which gives a list of possible remedies, or https://support.google.com/mail/?p=BadCredentials, which is largely unhelpful. There are two main solutions to this in PHPMailer:
-* Gmail doesn't like unexpected or unfamiliar clients connecting to gmail accounts, so it may require you to log into your gmail account in your browser as usual (this will be mentioned in error output visible if you set `SMTPDebug = 2`), or to visit the [unlock CAPTCHA page](https://www.google.com/accounts/DisplayUnlockCaptcha) mentioned in their support doc.
+* Gmail doesn't like unexpected or unfamiliar clients connecting to gmail accounts, so it may require you to log into your gmail account in your browser as usual (this will be mentioned in error output visible if you set `SMTPDebug = SMTP::DEBUG_SERVER`), or to visit the [unlock CAPTCHA page](https://www.google.com/accounts/DisplayUnlockCaptcha) mentioned in their support doc.
 * Enabling "[Allow less secure apps](https://support.google.com/accounts/answer/6010255)" will usually solve the problem for PHPMailer, and it does not make your app significantly less secure. Reportedly, changing this setting may take an hour or more to take effect, so don't expect an immediate fix.
 * PHPMailer added support for XOAUTH2 in version 5.2.11, though **you must be running PHP 5.5 or later** in order to use it. Documentation on how to set it up can be found on [this wiki page](https://github.com/PHPMailer/PHPMailer/wiki/Using-Gmail-with-XOAUTH2).
 
@@ -203,7 +204,7 @@ Warning: stream_socket_enable_crypto(): SSL operation failed with code 1.
 OpenSSL Error messages: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
 ```
 
-You may not see this error; In implicit encryption mode (SMTPS) it may be hidden because there isn't a way for the channel to show messages - SMTP+STARTTLS is generally easier to debug because of this. In an SMTP transcript this will typically be shown as trying to send a `STARTTLS` command immediately followed by a `QUIT` command. It will also not be shown if you set `SMTPDebug = 1`; set it to at least 2 to see server responses.
+You may not see this error; In implicit encryption mode (SMTPS) it may be hidden because there isn't a way for the channel to show messages - SMTP+STARTTLS is generally easier to debug because of this. In an SMTP transcript this will typically be shown as trying to send a `STARTTLS` command immediately followed by a `QUIT` command. It will also not be shown if you set `SMTPDebug = SMTP::DEBUG_CLIENT`; set it to at least `SMTP::DEBUG_SERVER` to see server responses.
 
 There are three likely explanations and solutions for this error:
 
