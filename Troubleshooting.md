@@ -48,9 +48,7 @@ Set this option by including a line like this in your script:
 The output format will adapt itself to command-line or HTML output, though you can override this using the `Debugoutput` property. If you are using authentication, user IDs and passwords will be redacted in the debug output *except* when you use `SMTP::DEBUG_LOWLEVEL` (4).
 
 ## "SMTP Error: Could not connect to SMTP host."
-This may also appear as **`SMTP connect() failed`** or **`Called Mail() without being connected`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking (for example as GoDaddy does) or another issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
-
-The problem can also be caused by Avast Business who is blocking PHPMailer (during development).
+This may also appear as **`SMTP connect() failed`**, **`Called Mail() without being connected`**, **`Network is unreachable (101)`** in debug output. This is often reported as a PHPMailer problem, but it's almost always down to local DNS failure, firewall blocking (for example as GoDaddy does), local anti-virus software, or another issue on your local network. It means that PHPMailer is unable to contact the SMTP server you have specified in the `Host` property, but doesn't say exactly why. It can also be caused by not having the `openssl` extension loaded (See encryption notes below).
 
 Some techniques to diagnose the source of this error are discussed below.
 
