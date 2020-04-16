@@ -20,12 +20,11 @@ Give your project a name that reflects its use, for example "www.example.com con
 
 ![New project](images/screen02.png)
 
-When the project has been created, click the **APIs & auth** menu, then select the **APIs** submenu.
+When the project has been created, type "gmail api" in the top search bar, and click on **Gmail API**.
 
-![Select APIs](images/screen03.png)
+![Select Gmail API](https://imgur.com/TmIE7cR)
 
 Clicking the **Gmail API** link will ask you to enable it, so click the **Enable API** button:
-
 ![Enable Gmail API](images/screen04.png)
 
 Now select **Credentials** from the left-hend menu, then click the **Create new Client ID** button:
