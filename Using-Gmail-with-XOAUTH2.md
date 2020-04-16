@@ -22,7 +22,7 @@ Give your project a name that reflects its use, for example "www.example.com con
 
 When the project has been created, type "gmail api" in the top search bar, and click on **Gmail API**.
 
-![Select Gmail API](https://imgur.com/TmIE7cR)
+![Select Gmail API](images/api_search.png)
 
 Clicking the **Gmail API** link will ask you to enable it, so click the **Enable API** button:
 ![Enable Gmail API](images/screen04.png)
