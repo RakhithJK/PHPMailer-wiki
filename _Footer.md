@@ -1,1 +1,1 @@
-<html><body><div class='wrapper'>Hello</div></body></html>
+<html><body><div class='wrapper'>Hello.</div></body></html>
