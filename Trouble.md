@@ -1,8 +1,7 @@
 Message could not be sent. Mailer Error: SMTP connect() failed.
 Please how do i solve this issue... my login credentials are correct but i still cant use it to send mail.
 
-
-<?php
+`<?php
 	/**
 	 * this handles mail sending 
 	 */
@@ -66,4 +65,4 @@ Please how do i solve this issue... my login credentials are correct but i still
 		}
 	}
 
-?>
+?>`
