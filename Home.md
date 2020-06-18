@@ -1,6 +1,6 @@
 # Welcome to the PHPMailer wiki! 
 
-To learn about PHPMailer, please check out the [code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and [the documentation](https://github.com/PHPMailer/PHPMailer/tree/master/docs) provided with PHPMailer.
+To learn about PHPMailer, please check out the [code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and [the documentation](https://github.com/PHPMailer/PHPMailer/tree/master/docs) provided with PHPMailer. There is also a [comprehensive tutorial](https://alexwebdevelop.com/phpmailer-tutorial/) by Alessandro Castellano.
 
 If you're having trouble getting PHPMailer to work, read [the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting).
 
