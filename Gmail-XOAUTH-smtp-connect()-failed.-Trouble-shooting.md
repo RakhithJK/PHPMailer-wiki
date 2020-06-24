@@ -50,3 +50,6 @@ You can trouble shoot by adding following code to PHPMailer.php
                             throw new Exception($this->lang('authenticate'));
                         }
                     }
+
+
+**Bhim Bhandari/Venture Information System**
