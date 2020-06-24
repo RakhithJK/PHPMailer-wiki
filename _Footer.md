@@ -1,1 +1,1 @@
-<html><body><div class='wrapper'>Bhim/Bhandari Venture Information System</div></body></html>
+<html><body><div class='wrapper'></div></body></html>
