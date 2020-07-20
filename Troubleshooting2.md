@@ -1,1 +1,0 @@
-https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2
