@@ -70,6 +70,8 @@ Finally it will use your redirect to reload the script, and produce a refresh to
 
 This is what we did all this work for: this value is what you need to perform XOAUTH2 authentication when connecting to Gmail's SMTP server.
 
+Google won't reissue a refresh token unless the old one has been revoked or has expired – you will just get an empty token. If that happens, revoke the refresh token via the Google account's permissions screen, then run `get_oauth_token.php` again and reauthorise the permissions, and this time you should get a refresh token.
+
 I have shown the real values used in this example, but this Client ID has now been deleted so it won't work any more (the ability to do this is an OAuth feature) - you must generate your own!
 
 ## Configure your email script
