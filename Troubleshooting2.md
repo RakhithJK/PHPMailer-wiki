@@ -1,0 +1,1 @@
+SMTP connect() failed
