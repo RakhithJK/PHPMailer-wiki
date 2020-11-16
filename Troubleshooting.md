@@ -158,6 +158,23 @@ From December 2014, Google started imposing an authentication mechanism called [
 * Enabling "[Allow less secure apps](https://support.google.com/accounts/answer/6010255)" will usually solve the problem for PHPMailer, and it does not make your app significantly less secure. Reportedly, changing this setting may take an hour or more to take effect, so don't expect an immediate fix.
 * PHPMailer added support for XOAUTH2 in version 5.2.11, though **you must be running PHP 5.5 or later** in order to use it. Documentation on how to set it up can be found on [this wiki page](https://github.com/PHPMailer/PHPMailer/wiki/Using-Gmail-with-XOAUTH2).
 
+### Exchange Online, Outlook.com, live.com, office365.com, hotmail.com and other Microsoft domains
+Microsoft may disable SMTP authentication in a similar way to Google. as per their docs:
+
+> If you've enabled security defaults in your organization, SMTP AUTH is already disabled in Exchange Online.
+
+Unfortunately they do not provide any feedback letting you know that it's happening, so it just looks like a regular authentication failure in the debug output, indistinguishable from having the wrong id or password:
+
+```
+2020-11-15 13:08:25 SERVER -> CLIENT: 535 5.7.3 Authentication unsuccessful [HK0PR01CA0063.apcprd01.prod.exchangelabs.com]
+```
+
+If they have done this, you can re-enable authentication for an individual user account from the Outlook admin portal at:
+
+    Admin / Users / Active users / [select user] / Mail tab / Mail apps
+
+or [for the entire tenant using Powershell](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) (the user account setting overrides the tenant setting).
+
 ## Using encryption
 You should use encryption at every opportunity, otherwise you're inviting all kinds of unpleasant possibilities for phishing, identity theft, eavesdropping, stolen credentials etc.
 
