@@ -1,6 +1,6 @@
 # Troubleshooting PHPMailer Problems
 
-Whatever problem you're having, first **make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer)**. If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer) make this mistake, and is especially likely since the release of PHPMailer 6.0.
+Whatever problem you're having, first **make sure you are using the [latest PHPMailer](https://github.com/PHPMailer/PHPMailer)**. If you have based your code on an example you found somewhere other than here on GitHub, it's very probably outdated - base your code on the examples in [the examples folder](https://github.com/PHPMailer/PHPMailer/tree/master/examples). About 90% of [questions on Stack Overflow](https://stackoverflow.com/questions/tagged/phpmailer) make this mistake, and is especially likely since the release of PHPMailer 6.0.
 
 ## Loading classes
 ### Using composer
@@ -21,7 +21,7 @@ Fatal error: Class 'League\OAuth2\Client\Provider\Google' not found in PHPMailer
 To fix this either configure composer as described or download this class and all its dependencies and load them manually yourself.
 
 ### Using PHPMailer's own autoloader
-**This only applies to the legacy 5.2 branch**. Not so long ago, PHPMailer changed the way that it loaded classes so that it was more compatible with composer, many frameworks, and the [PHP PSR-0 autoloading standard](http://www.php-fig.org/psr/psr-0/). Note that because 5.2 supports PHP back to version 5.0, we cannot support the more recent [PSR-4 standard](http://www.php-fig.org/psr/psr-4/), nor can we use namespaces. Previously, PHPMailer loaded the SMTP class explicitly, and this causes problems if you want to provide your own implementation. You may have seen old scripts doing this:
+**This only applies to the legacy 5.2 branch**. Not so long ago, PHPMailer changed the way that it loaded classes so that it was more compatible with composer, many frameworks, and the [PHP PSR-0 autoloading standard](https://www.php-fig.org/psr/psr-0/). Note that because 5.2 supports PHP back to version 5.0, we cannot support the more recent [PSR-4 standard](https://www.php-fig.org/psr/psr-4/), nor can we use namespaces. Previously, PHPMailer loaded the SMTP class explicitly, and this causes problems if you want to provide your own implementation. You may have seen old scripts doing this:
 
 ```php
 require 'class.phpmailer.php';
@@ -53,7 +53,7 @@ This may also appear as **`SMTP connect() failed`**, **`Called Mail() without be
 Some techniques to diagnose the source of this error are discussed below.
 
 ### GoDaddy
-Popular US hosting provider GoDaddy imposes very strict (to the point of becoming almost useless) constraints on sending an email. They block outbound SMTP to ports 25, 465 and 587 to all servers except their own. This problem is the subject of many frustrating [questions on Stack Overflow](http://stackoverflow.com/search?q=smtp+godaddy). If you find your script works on your local machine, but not when you upload it to GoDaddy, this will be what's happening to you. The solution is extremely poorly documented by GoDaddy: you **must** send through their servers, and also disable all security features, username, and password (great, huh?!), giving you this config for PHPMailer:
+Popular US hosting provider GoDaddy imposes very strict (to the point of becoming almost useless) constraints on sending an email. They block outbound SMTP to ports 25, 465 and 587 to all servers except their own. This problem is the subject of many frustrating [questions on Stack Overflow](https://stackoverflow.com/search?q=smtp+godaddy). If you find your script works on your local machine, but not when you upload it to GoDaddy, this will be what's happening to you. The solution is extremely poorly documented by GoDaddy: you **must** send through their servers, and also disable all security features, username, and password (great, huh?!), giving you this config for PHPMailer:
 
 ```php
 $mail->isSMTP();
@@ -153,7 +153,7 @@ If your authentication is failing, there are several likely causes:
 Generally, you do not want to send a username or password over an unencrypted link. Some SMTP authentication schemes do add a minimal level of security (sending short hashes rather than clear text), but these provide only minimal protection, and so most servers do not allow authentication without encryption. Fix this by setting `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS` and `Port = 587` as well as setting the `Username` and `Password` properties.
 
 ### Gmail, OAuth2 and "Allow less secure apps"
-From December 2014, Google started imposing an authentication mechanism called [XOAUTH2](https://developers.google.com/gmail/xoauth2_protocol) based on [OAuth2](http://oauth.net/2/) for access to their apps, including Gmail. This change can break both SMTP and IMAP access to Gmail, and you may receive authentication failures (often "5.7.14 Please log in via your web browser and then try again" or "Username and Password not accepted") from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others. The error output may include a link to https://support.google.com/mail/bin/answer.py?answer=78754, which gives a list of possible remedies, or https://support.google.com/mail/?p=BadCredentials, which is largely unhelpful. There are two main solutions to this in PHPMailer:
+From December 2014, Google started imposing an authentication mechanism called [XOAUTH2](https://developers.google.com/gmail/xoauth2_protocol) based on [OAuth2](https://oauth.net/2/) for access to their apps, including Gmail. This change can break both SMTP and IMAP access to Gmail, and you may receive authentication failures (often "5.7.14 Please log in via your web browser and then try again" or "Username and Password not accepted") from many email clients, including PHPMailer, Apple Mail, Outlook, Thunderbird and others. The error output may include a link to https://support.google.com/mail/bin/answer.py?answer=78754, which gives a list of possible remedies, or https://support.google.com/mail/?p=BadCredentials, which is largely unhelpful. There are two main solutions to this in PHPMailer:
 * Gmail doesn't like unexpected or unfamiliar clients connecting to gmail accounts, so it may require you to log into your gmail account in your browser as usual (this will be mentioned in error output visible if you set `SMTPDebug = SMTP::DEBUG_SERVER`), or to visit the [unlock CAPTCHA page](https://www.google.com/accounts/DisplayUnlockCaptcha) mentioned in their support doc.
 * Enabling "[Allow less secure apps](https://support.google.com/accounts/answer/6010255)" will usually solve the problem for PHPMailer, and it does not make your app significantly less secure. Reportedly, changing this setting may take an hour or more to take effect, so don't expect an immediate fix.
 * PHPMailer added support for XOAUTH2 in version 5.2.11, though **you must be running PHP 5.5 or later** in order to use it. Documentation on how to set it up can be found on [this wiki page](https://github.com/PHPMailer/PHPMailer/wiki/Using-Gmail-with-XOAUTH2).
@@ -183,7 +183,7 @@ PHPMailer uses TLS encryption; TLS is simply the "new" (since 1998!) name for SS
 The TLS / SSL config you use for email has nothing to do with any certificate you may use on your web site; you can still use encrypted email even if your site does not have a certificate.
 
 ### Check you have the openssl extension
-To use any kind of encryption you need the [`openssl` PHP extension](http://php.net/manual/en/book.openssl.php) enabled. If you don't have it installed, or it's misconfigured, you're likely to have trouble at the `STARTTLS` phase of connections. Check this by looking at the output of `phpinfo()` or `php -i` (look for an 'openssl' section), or `openssl` listed in the output of `php -m`, or run this line of code:
+To use any kind of encryption you need the [`openssl` PHP extension](https://php.net/manual/en/book.openssl.php) enabled. If you don't have it installed, or it's misconfigured, you're likely to have trouble at the `STARTTLS` phase of connections. Check this by looking at the output of `phpinfo()` or `php -i` (look for an 'openssl' section), or `openssl` listed in the output of `php -m`, or run this line of code:
 ```php
 <?php echo (extension_loaded('openssl')?'SSL loaded':'SSL not loaded')."\n"; ?>
 ```
@@ -193,7 +193,7 @@ There are two "flavours" of transport encryption available for email:
 * "SMTPS", also referred to as "implicit" because it assumes that you're going to be using encryption right from the start of the connection. In PHPMailer this mode is selected by setting `SMTPSecure = PHPMailer::ENCRYPTION_SMTPS` (or `'ssl'`), and usually requires `Port = 465`.
 * "SMTP+STARTTLS", also referred to as "explicit" because it initially connects insecurely then _explicitly_ asks for the connection to start using encryption. In PHPMailer this mode is selected by setting `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS` (or `'tls'`), and usually requires `Port = 587` (defined in [RFC6409](https://tools.ietf.org/html/rfc6409)), though it can work on any port. The advantage of this approach is that a single port can support both encrypted and unencrypted connections.
 
-SMTPS on port 465 was [deprecated in 1998](http://en.wikipedia.org/wiki/SMTPS) and was mostly only used by Microsoft; the standards recommended using SMTP+STARTTLS on port 587 instead. Implicit TLS on port 465 become a recommended solution again in 2018 in [RFC8314](https://tools.ietf.org/html/rfc8314), but this is not a straightforward undeprecation; the original SMTPS is simply regular _SMTP_ over TLS, whereas RFC6409 is the subtly different _SMTP Submission_ protocol over explicit TLS. RFC8314 is the same SMTP Submission protocol over implicit TLS. The difference is largely academic, but the net result is that the availability of an encrypted SMTP service on port 465 **does not** mean that it supports SMTP submission, and assuming that it does is a recipe for broken scripts.
+SMTPS on port 465 was [deprecated in 1998](https://en.wikipedia.org/wiki/SMTPS) and was mostly only used by Microsoft; the standards recommended using SMTP+STARTTLS on port 587 instead. Implicit TLS on port 465 become a recommended solution again in 2018 in [RFC8314](https://tools.ietf.org/html/rfc8314), but this is not a straightforward undeprecation; the original SMTPS is simply regular _SMTP_ over TLS, whereas RFC6409 is the subtly different _SMTP Submission_ protocol over explicit TLS. RFC8314 is the same SMTP Submission protocol over implicit TLS. The difference is largely academic, but the net result is that the availability of an encrypted SMTP service on port 465 **does not** mean that it supports SMTP submission, and assuming that it does is a recipe for broken scripts.
 
 ```php
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -278,13 +278,13 @@ A highly recommended alternative is to use the [Certainty](https://packagist.org
 Failing that, you can allow **insecure** connections via the `SMTPOptions` property introduced in PHPMailer 5.2.10 (it's possible to do this by [subclassing the SMTP class](https://github.com/PHPMailer/PHPMailer/wiki/Overriding-the-SMTP-class) in earlier versions), though this is **not recommended** as it defeats much of the point of using a secure transport at all:
 
 ```php
-$mail->SMTPOptions = array(
-    'ssl' => array(
+$mail->SMTPOptions = [
+    'ssl' => [
         'verify_peer' => false,
         'verify_peer_name' => false,
-        'allow_self_signed' => true
-    )
-);
+        'allow_self_signed' => true,
+    ]
+];
 ```
 
 You can also change these settings globally in your php.ini, but that's a **really** bad idea; PHP 5.6 made this change for very good reasons.
@@ -385,7 +385,7 @@ There is [a separate document about deliverability and spam filtering](https://g
 # Where else to get help?
 Several resources are worth checking:
 * [The code examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) provided with PHPMailer. Base your code on these, not some ancient example from 2003.
-* [The API docs](http://phpmailer.github.io/PHPMailer/).
+* [The API docs](https://phpmailer.github.io/PHPMailer/).
 * [The code itself](https://github.com/PHPMailer/PHPMailer/blob/master/src/PHPMailer.php) - it's very well commented.
 * [The issue tracker](https://github.com/PHPMailer/PHPMailer/issues) - it's very likely a problem similar to yours has happened before, so **search in there** _before_ opening a ticket. If you do create an issue, be sure to include your code, preferably the minimum necessary to reproduce or define the problem so that we have a chance to see what you're seeing - saying "It doesn't work" is not a bug report!
-* [StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer) - there are a ton of PHPMailer questions on there, the vast majority of which could be fixed by reading this page! **Search the questions** for the error message you're seeing **before** posting a question. If you post a question on SO, make sure you tag it as `PHPMailer` so that we will see it and **please don't** open an issue here as well. The issue tracker here is intended for actual bugs in PHPMailer, not problems with your server.
+* [StackOverflow](https://stackoverflow.com/questions/tagged/phpmailer) - there are a ton of PHPMailer questions on there, the vast majority of which could be fixed by reading this page! **Search the questions** for the error message you're seeing **before** posting a question. If you post a question on SO, make sure you tag it as `PHPMailer` so that we will see it and **please don't** open an issue here as well. The issue tracker here is intended for actual bugs in PHPMailer, not problems with your server.
