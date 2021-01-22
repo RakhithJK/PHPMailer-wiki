@@ -116,6 +116,21 @@ Escape character is '^]'.
 
 If it produces no output or something that doesn't start with `220`, then either your server is down or you've got the wrong server.
 
+If your system doesn't have telnet installed, you can use curl:
+```sh
+$ curl telnet://smtp.gmail.com:25
+220 smtp.gmail.com ESMTP e15sm11606635wrx.86 - gsmtp
+quit
+221 2.0.0 closing connection e15sm11606635wrx.86 - gsmtp
+```
+or `nc` (netcat):
+```sh
+$ nc -v smtp.gmail.com 25
+Connection to smtp.gmail.com 25 port [tcp/smtp] succeeded!
+220 smtp.gmail.com ESMTP c18sm31847486wmk.0 - gsmtp
+quit
+221 2.0.0 closing connection c18sm31847486wmk.0 - gsmtp
+```
 ## Firewall redirection
 Another thing to look out for here is that the name the mail server responds with should be related to the server you requested, as you can see in the above example - we asked for `smtp.gmail.com` and got `gmail-smtp-msa.l.google.com`, which looks like it's something to do with google - if instead you see something like the name of your ISP, then it could mean that your ISP's firewall is redirecting you transparently to their own mail servers, and you're likely to see authentication and TLS certificate verification failures (see below for more) because you're logging into the wrong server. This is very likely to happen on port 25, but less likely to happen on ports 465 and 587, so it's yet another reason to use encryption!
 For GoDaddy Cpanel servers with WHM access helps disabling  "SMTP Restrictions" in "Home »Security Center »SMTP Restrictions"  (This feature prevents users from bypassing the mail server to send mail. It will allow only the MTA, mailman, and root to connect to remote SMTP servers.)
