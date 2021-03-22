@@ -17,7 +17,7 @@ Tidelift’s security response team coordinates patches for new breaking securit
 * **Licensing verification and indemnification**
 Tidelift verifies license information to enable easy policy enforcement and adds intellectual property indemnification to cover creators and users in case something goes wrong. You always have a 100% up-to-date bill of materials for your dependencies to share with your legal team, customers, or partners.
 
-* Maintenance and code improvement
+* **Maintenance and code improvement**
 Tidelift ensures the software you rely on keeps working as long as you need it to work. Your managed dependencies are actively maintained and we recruit additional maintainers where required.
 
 * **Package selection and version guidance**
