@@ -236,11 +236,12 @@ OpenSSL Error messages: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:
 
 You may not see this error; In implicit encryption mode (SMTPS) it may be hidden because there isn't a way for the channel to show messages - SMTP+STARTTLS is generally easier to debug because of this. In an SMTP transcript this will typically be shown as trying to send a `STARTTLS` command immediately followed by a `QUIT` command. It will also not be shown if you set `SMTPDebug = SMTP::DEBUG_CLIENT`; set it to at least `SMTP::DEBUG_SERVER` to see server responses.
 
-There are three likely explanations and solutions for this error:
+There are several likely explanations and solutions for this error:
 
 1. The server is publishing a bad, self-signed, or expired certificate - fix by replacing the certificate on your mail server. If you don't have access, ask whoever the admin is. You can run [some diagnostic tests](https://www.checktls.com) which will tell you whether the problem is at your end (if the tests pass) or the mail server's.
 1. Your ISP is transparently redirecting your SMTP traffic to a different server - this is effectively a man-in-the-middle attack and is exactly the kind of thing that TLS is designed to protect you from. An appropriate fix here is to use your ISP's server explicitly - this is especially true for GoDaddy - but you may find this interferes with your ability to use some *from* addresses, especially if you're using common hosts like Gmail or Yahoo.
 1. Your operating system or PHP configuration is using an out of date CA (certificate authority) certificate file, preventing it being able to verify a perfectly valid certificate from the server.
+1. Your PHP version is so old that it lacks support for the TLS versions supported by the server. In this situation even disabling certificate verification will not help.
 
 ### Checking CA certificates
 First of all find out where your PHP instance gets its CA certificates from:
