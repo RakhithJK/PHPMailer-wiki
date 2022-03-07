@@ -1,8 +1,172 @@
-The official PHPMailer wiki provides an example of using Google's XOAuth2 SMTP authentication using the [League OAuth2 client library](https://github.com/thephpleague/oauth2-client). This library works fine, but has one drawback to it.
+By default, PHPMailer supports Google's XOAuth2 SMTP authentication using the [League OAuth2 client library](https://github.com/thephpleague/oauth2-client). This library works fine, but has one drawback to it.
 
 For small projects, using league/oauth2-client library to make api call to Google will do just fine but it comes with many dependencies; ircmaxell/random-lib, guzzlehttp/guzzle, and a few others. On top of this, you must install the [league oauth2 google provider library](https://github.com/thephpleague/oauth2-google).
 
-But you can still reduce on the number of third party libraries you're using in your project by using the official [Google API client](https://github.com/google/google-api-php-client) with [Curl](http://curl.haxx.se/). (Ofcourse if you're using the league OAuth2 library generally in you project for example for authentication, then this would not do you so much good - so stick with that)
+But you can still reduce on the number of third party libraries you're using in your project by using the official [Google API client](https://github.com/google/google-api-php-client) with [Curl](http://curl.haxx.se/). (Of course if you're using the league OAuth2 library generally in your project, for example for authentication, then this would not do you so much good – so stick with that)
+
+## Using PHPMailer 6.6.x and google/apiclient 2.x
+
+PHPMailer 6.6.0 introduced an `OAuthTokenProvider` interface that allows for easier integration with *any* OAuth2 token provider. In this guide we will create an implementation of OAuthTokenProvider that uses `v2.x` of Google's API. We assume that you have the PHP curl extension installed and working on your PHP installation.
+
+### Installing dependencies
+
+Firstly, install PHPMailer using composer, remember that custom `OAuthTokenProviders` is only supported starting with PHPMailer 6.6, so you must specify this as the lowest version you will accept:
+
+    composer require phpmailer/phpmailer ~6.6
+
+Now install the Google API client library:
+
+    composer require google/apiclient ^2.11
+
+### Configuring a Google client application
+
+You will need to [register your OAuth client ID](https://console.cloud.google.com/apis/credentials).
+
+**Step 1**: Click "+ Create Credentials", then "OAuth client ID":
+
+<img src="https://user-images.githubusercontent.com/13329586/156445761-6ffdd03f-31d1-49ae-98f5-fb3ff2652303.png" alt="Step 1 for registering Google OAuth client" width=50% />
+
+**Step 2**: choose "Web application" as the application type, and fill in the reset of the form:
+
+<img src="https://user-images.githubusercontent.com/13329586/156445855-df670c9b-603b-496d-bdaf-19d0986be001.png" alt="Step 2 for registering Google OAuth client" width=50% />
+
+**Step 3**: after the app has been created, download its details in JSON and rename the file to `gmail-xoauth2-credentials.json`. Create another empty file named `gmail-xoauth-token.json` which will hold the access and refresh tokens after user authorization:
+
+<img src="https://user-images.githubusercontent.com/13329586/156445761-6ffdd03f-31d1-49ae-98f5-fb3ff2652303.png" alt="Step 3 for registering Google OAuth client" width=50% />
+
+**Step 4**: create a new class called `GoogleOauthClient` which implements `OAuthTokenProvider` and uses the Google API client as a token provider. This class provides the bridge between PHPMailer's OAuth interface and the google client library:
+
+```php
+use PHPMailer\PHPMAiler\OAuthTokenProvider;
+
+class GoogleOauthClient implements OAuthTokenProvider
+{
+    private $oauthUserEmail;
+    private $client;
+    private $tokenPath;
+
+    public function __construct($oauthUserEmail, $credentialsFile, $tokenFile)
+    {
+        $this->oauthUserEmail = $oauthUserEmail;
+
+        $this->client = new \Google_Client();
+        $this->client->setScopes([\Google_Service_Gmail::MAIL_GOOGLE_COM]);
+        $this->client->setAuthConfig($credentialsFile);
+        $this->client->setApplicationName('Your Application Name');
+        $this->client->setAccessType('offline');
+
+        // Set the token path
+        $this->tokenPath = $tokenPath;
+
+        // Load previously stored auth token
+        if (file_exists($this->tokenPath)) {
+            $accessToken = json_decode(file_get_contents($this->tokenPath), true);
+            $this->client->setAccessToken($accessToken);
+        }
+    }
+
+    public function refreshOAuthToken()
+    {
+        // If our token has not expired, there is nothing to do
+        if (!$this->client->isAccessTokenExpired()) {
+            return;
+        }
+
+        // If our token has expired, but we do not have a refresh token
+        if (!$this->client->getRefreshToken()) {
+            $authUrl = $this->client->createAuthUrl();
+            printf("Open the following link in your browser:\n%s\n", $authUrl);
+            print 'Enter verification code: ';
+            $authCode = trim(fgets(STDIN));
+
+            $accessToken = $this->client->fetchAccessTokenWithAuthCode($authCode);
+            $this->client->setAccessToken($accessToken);
+
+            if (array_key_exists('error', $accessToken)) {
+                throw new \Exception(join(', ', $accessToken));
+            }
+        }
+
+        $this->client->fetchAccessTokenWithRefreshToken($this->client->getRefreshToken());
+
+        // Save the token to the token file
+        file_put_contents($this->tokenPath, json_encode($this->client->getAccessToken()));
+    }
+
+    /**
+     * @see \PHPMailer\PHPMailer\OAuth::getOauth64()
+     */
+    public function getOauth64(): string
+    {
+        $this->refreshOAuthToken();
+
+        $oauthUserEmail = env('GOOGLE_CLIENT_EMAIL');
+        $oauthToken = $this->client->getAccessToken();
+        return base64_encode(
+            'user=' .
+            $this->oauthUserEmail .
+            "\001auth=Bearer " .
+            $oauthToken['access_token'] .
+            "\001\001"
+        );
+    }
+}
+```
+
+## In action
+Now that we have an implementation of `OAuthTokenProvider` for the Google API we can put this together with PHPMailer to send an email. We'll use an amended version of `examples/gmail_xoauth.phps` to demonstrate:
+
+```php
+<?php
+
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
+//SMTP needs accurate times, and the PHP time zone MUST be set
+//This should be done in your php.ini, but this is how to do it if you don't have access to that
+date_default_timezone_set('Etc/UTC');
+
+//Load dependencies from composer
+//If this causes an error, run 'composer install'
+require '../vendor/autoload.php';
+
+//Create a new PHPMailer instance
+$mail = new PHPMailer();
+$mail->isSMTP();
+//SMTP::DEBUG_OFF = off (for production use)
+$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+$mail->Host = 'smtp.gmail.com';
+$mail->Port = 587;
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+$mail->SMTPAuth = true;
+$mail->AuthType = 'XOAUTH2';
+
+//Create and pass GoogleOauthClient to PHPMailer
+$oauthTokenProvider = new \GoogleOauthClient(
+    'someone@gmail.com',
+    'path/to/gmail-xoauth2-credentials.json',
+    'path/to/gmail-xoauth-token.json'
+);
+$mail->setOAuth($oauthTokenProvider);
+
+//construct the email itself
+$mail->setFrom($email, 'First Last');
+$mail->addAddress('someone@gmail.com', 'John Doe');
+$mail->Subject = 'PHPMailer GMail XOAUTH2 SMTP test';
+$mail->CharSet = PHPMailer::CHARSET_UTF8;
+$mail->msgHTML(file_get_contents('contentsutf8.html'), __DIR__);
+$mail->AltBody = 'This is a plain-text message body';
+$mail->addAttachment('images/phpmailer_mini.png');
+
+//send the message, check for errors
+if (!$mail->send()) {
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+} else {
+    echo 'Message sent!';
+}
+```
+
+## An older version of this guide for pre PHPMailer 6.6.0
 
 Firstly, lets install PHPMailer using composer, remember Google's XOAUTH2 SMTP & IMAP authentication mechanism is only supported starting with PHPMailer 5.2.11. So you must install that or later;<br/>
 `composer require phpmailer/phpmailer ~5.2`
@@ -489,159 +653,3 @@ class Gmail {
 
 That is it, so we can now try sending an email
 `Gmail::sendMail();`
-
-
-## Using PHPMailer 6.x and google/apiclient 2.x
-PHPMailer introduced an interface `OAuthTokenProvider` in 6.6 that allows for easy integrations with any OAuth2 token provider. In this guide we will create an implementation of OAuthTokenProvider that uses `v2.x` of Google's API. We assume that you have curl installed and working on your machine.
-
-Firstly, lets install PHPMailer using composer, remember that custom OAuthTokenProviders is only supported starting with PHPMailer 6.6. So you must install that or later:
-`composer require phpmailer/phpmailer ~6.6`
-
-Once you have installed PHPMailer, again use composer to install the Google API client library by:
-`composer require google/apiclient ^2.11`
-
-Next, you will need to [register your OAuth client ID](https://console.cloud.google.com/apis/credentials). Step 1: Click "+ Create Credentials", then "OAuth client ID":
-
-<img src="https://user-images.githubusercontent.com/13329586/156445761-6ffdd03f-31d1-49ae-98f5-fb3ff2652303.png" alt="Step 1 for registering Google OAuth client" width=50% />
-
-Step 2: choose "Web application" as the application type, and fill in the reset of the form:
-
-<img src="https://user-images.githubusercontent.com/13329586/156445855-df670c9b-603b-496d-bdaf-19d0986be001.png" alt="Step 2 for registering Google OAuth client" width=50% />
-
-Step 3: after the app has been created download its details in JSON and rename the file to `gmail-xoauth2-credentials.json` and create another file and name it `gmail-xoauth-token.json` which will hold the access and refresh tokens after user authorization:
-
-<img src="https://user-images.githubusercontent.com/13329586/156445761-6ffdd03f-31d1-49ae-98f5-fb3ff2652303.png" alt="Step 3 for registering Google OAuth client" width=50% />
-
-Step 4: create a new class called `GoogleOauthClient` which implements `OAuthTokenProvider` and uses the Google API client as a token provider:
-
-```php
-
-class GoogleOauthClient implements OAuthTokenProvider
-{
-    private $oauthUserEmail;
-    private $client;
-    private $tokenPath;
-
-    public function __construct($oauthUserEmail, $credentialsFile, $tokenFile)
-    {
-        $this->oauthUserEmail = $oauthUserEmail;
-
-        $this->client = new \Google_Client();
-        $this->client->setScopes([\Google_Service_Gmail::MAIL_GOOGLE_COM]);
-        $this->client->setAuthConfig($credentialsFile);
-        $this->client->setApplicationName('Your Application Name');
-        $this->client->setAccessType('offline');
-
-        // Set the token path
-        $this->tokenPath = $tokenPath;
-
-        // Load previously stored auth token
-        if (file_exists($this->tokenPath)) {
-            $accessToken = json_decode(file_get_contents($this->tokenPath), true);
-            $this->client->setAccessToken($accessToken);
-        }
-    }
-
-    public function refreshOAuthToken()
-    {
-        // If our token has not expired, there is nothing to do
-        if (!$this->client->isAccessTokenExpired()) {
-            return;
-        }
-
-        // If our token has expired, but we do not have a refresh token
-        if (!$this->client->getRefreshToken()) {
-            $authUrl = $this->client->createAuthUrl();
-            printf("Open the following link in your browser:\n%s\n", $authUrl);
-            print 'Enter verification code: ';
-            $authCode = trim(fgets(STDIN));
-
-            $accessToken = $this->client->fetchAccessTokenWithAuthCode($authCode);
-            $this->client->setAccessToken($accessToken);
-
-            if (array_key_exists('error', $accessToken)) {
-                throw new \Exception(join(', ', $accessToken));
-            }
-        }
-
-        $this->client->fetchAccessTokenWithRefreshToken($this->client->getRefreshToken());
-
-        // Save the token to the token file
-        file_put_contents($this->tokenPath, json_encode($this->client->getAccessToken()));
-    }
-
-    /**
-     * @see \PHPMailer\PHPMailer\OAuth::getOauth64()
-     */
-    public function getOauth64(): string
-    {
-        $this->refreshOAuthToken();
-
-        $oauthUserEmail = env('GOOGLE_CLIENT_EMAIL');
-        $oauthToken = $this->client->getAccessToken();
-        return base64_encode(
-            'user=' .
-            $this->oauthUserEmail .
-            "\001auth=Bearer " .
-            $oauthToken['access_token'] .
-            "\001\001"
-        );
-    }
-}
-```
-
-## In action
-Now that we have an implementation of OAuthTokenProvider for Google API we can put this together with PHPMailer to send an email. We'll use an abridged version of `examples/gmail_xoauth.phps` to demenstrate:
-
-```php
-<?php
-
-//Import PHPMailer classes into the global namespace
-use PHPMailer\PHPMailer\PHPMailer;
-
-//SMTP needs accurate times, and the PHP time zone MUST be set
-//This should be done in your php.ini, but this is how to do it if you don't have access to that
-date_default_timezone_set('Etc/UTC');
-
-//Load dependencies from composer
-//If this causes an error, run 'composer install'
-require '../vendor/autoload.php';
-
-//Create a new PHPMailer instance
-$mail = new PHPMailer();
-$mail->isSMTP();
-//SMTP::DEBUG_OFF = off (for production use)
-$mail->SMTPDebug = SMTP::DEBUG_SERVER;
-$mail->Host = 'smtp.gmail.com';
-$mail->Port = 587;
-$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-$mail->SMTPAuth = true;
-$mail->AuthType = 'XOAUTH2';
-
-//Create and pass GoogleOauthClient to PHPMailer
-$oauthTokenProvider = new \GoogleOauthClient(
-    'someone@gmail.com',
-    'path/to/gmail-xoauth2-credentials.json',
-    'path/to/gmail-xoauth-token.json'
-);
-$mail->setOAuth($oauthTokenProvider);
-
-//construct the email itself
-$mail->setFrom($email, 'First Last');
-$mail->addAddress('someone@gmail.com', 'John Doe');
-$mail->Subject = 'PHPMailer GMail XOAUTH2 SMTP test';
-$mail->CharSet = PHPMailer::CHARSET_UTF8;
-$mail->msgHTML(file_get_contents('contentsutf8.html'), __DIR__);
-$mail->AltBody = 'This is a plain-text message body';
-$mail->addAttachment('images/phpmailer_mini.png');
-
-//send the message, check for errors
-if (!$mail->send()) {
-    echo 'Mailer Error: ' . $mail->ErrorInfo;
-} else {
-    echo 'Message sent!';
-}
-
-```
-
-
