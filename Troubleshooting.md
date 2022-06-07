@@ -173,6 +173,8 @@ From December 2014, Google started imposing an authentication mechanism called [
 * Enabling "[Allow less secure apps](https://support.google.com/accounts/answer/6010255)" will usually solve the problem for PHPMailer, and it does not make your app significantly less secure. Reportedly, changing this setting may take an hour or more to take effect, so don't expect an immediate fix.
 * PHPMailer added support for XOAUTH2 in version 5.2.11, though **you must be running PHP 5.5 or later** in order to use it. Documentation on how to set it up can be found on [this wiki page](https://github.com/PHPMailer/PHPMailer/wiki/Using-Gmail-with-XOAUTH2).
 
+Starting from [May 30th 2022, Google has suspended password based logins altogether](https://support.google.com/accounts/answer/6010255?hl=en). This means that you will either have to implement XOAUTH2 authentication, or [create app passwords](https://support.google.com/accounts/answer/185833?hl=en). You will probably find the latter is easier as once you have set up the password, it works exactly as the conventional username and password approach always did.
+
 ### Exchange Online, Outlook.com, live.com, office365.com, hotmail.com and other Microsoft domains
 Microsoft may disable SMTP authentication in a similar way to Google. as per their docs:
 
