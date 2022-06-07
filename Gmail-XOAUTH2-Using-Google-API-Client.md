@@ -45,7 +45,7 @@ class GoogleOauthClient implements OAuthTokenProvider
     private $client;
     private $tokenPath;
 
-    public function __construct($oauthUserEmail, $credentialsFile, $tokenFile)
+    public function __construct($oauthUserEmail, $credentialsFile, $tokenPath)
     {
         $this->oauthUserEmail = $oauthUserEmail;
 
