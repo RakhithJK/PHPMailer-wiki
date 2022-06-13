@@ -1,1 +1,0 @@
-&copy; 2021 by wiki contributors.
