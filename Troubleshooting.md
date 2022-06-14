@@ -66,7 +66,7 @@ $mail->Port = 25;
 GoDaddy also refuses to send with a `From` address belonging to any aol, gmail, yahoo, hotmail, live, aim, or msn domain (see [their docs](https://www.godaddy.com/help/using-cdosys-to-send-email-from-your-windows-hosting-account-1073)). This is because all those domains deploy SPF and DKIM anti-forgery measures, and faking your from address is forgery.
 
 ## Read the SMTP transcript
-If you set `SMTPDebug = SMTP::DEBUG_SERVER` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting.
+If you set `SMTPDebug = SMTP::DEBUG_SERVER` or higher, you will see what the remote SMTP server says. Very often this will tell you exactly what is wrong - things like "Incorrect password", or sometimes a URL of a page to help you diagnose the problem. **Read what it says**. Google does this a lot - see below for info about their "Allow less secure apps" setting. (this is deprecated as of May 30, 2022 https://support.google.com/accounts/answer/6010255?hl=en&visit_id=637907936712891755-1767963704&p=less-secure-apps&rd=1)
 
 ## DNS failures
 These are often seen as connection timeouts, or "Temporary failure in name resolution", "could not resolve host", "getaddrinfo failed" or similar errors. Check your DNS is working by using the `dig` tool (from the `dnsutils` package on Debian/Ubuntu):
