@@ -2,21 +2,9 @@ WordPress uses PHPMailer for its [`wp_mail()` function](https://developer.wordpr
 
 Fortunately WordPress provides [a hook called `phpmailer_init`](https://developer.wordpress.org/reference/hooks/phpmailer_init/) that allows you to get your hands on the internal PHPMailer instance and configure it. Then, when you call `wp_mail`, it will use the PHPMailer instance configured as you like.
 
-Here is an example of how to use it. First of all we ask WordPress (using [`add_action()`](https://developer.wordpress.org/reference/functions/add_action/) to call a function we have defined when the `phpmailer_init` event happens. I've called it `mailer_init`, but you can use whatever name you like here. As the docs for this hook say, the function is passed an instance of PHPMailer, so we define the function to expect that.
+To make this work, we ask WordPress (using [`add_action()`](https://developer.wordpress.org/reference/functions/add_action/) to call a function we have defined when the `phpmailer_init` event happens. As the docs for this hook say, the function is passed an instance of PHPMailer, so we define the function to expect that.
 
-```php
-add_action('phpmailer_init', 'mailer_config');
-function mailer_config(PHPMailer $mailer){
-  $mailer->isSMTP();
-  $mailer->Host = "mail.example.com"; // your SMTP server
-  $mailer->Port = 25;
-  $mailer->SMTPDebug = 2;
-  $mailer->CharSet  = "utf-8";
-  //etc
-}
-```
-
-The second parameter to `add_action` is a [`callable`](https://www.php.net/callable), so it's also possible to provide an anonymous function to do the same thing. This means you don't have to pollute your namespace with unnecessary functions that will never be called from anywhere else:
+The second parameter to `add_action` is a [`callable`](https://www.php.net/callable), which means there are multiple ways of providing a reference to code that will be run by this hook. The most straightforward is an anonymous function (which pollute your namespace with unnecessary functions that will never be called from anywhere else), but you can also provide a simple function name, class and method names in an array, and any of the other ways that PHP allows for callables. Note that the PHPMailer instance is passed by reference, so you don't need to `return` anything from this function.
 
 ```php
 add_action('phpmailer_init', function ($mailer){
