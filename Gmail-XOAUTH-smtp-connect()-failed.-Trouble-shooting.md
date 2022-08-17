@@ -51,5 +51,5 @@ You can trouble shoot by adding following code to PHPMailer.php
                         }
                     }
 
-Credit
-`**@bhimbhadari122 Bhim Bhandari/Venture Information System**`
+
+**Bhim Bhandari/Venture Information System**
