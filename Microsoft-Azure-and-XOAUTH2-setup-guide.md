@@ -2,12 +2,18 @@ Using XOAUTH2 can be quite a bit of a pain in the... you know...
 
 This guide will show you how to set up XOAUTH2 with Microsoft Azure / Office365. 
 
-## Important!
+## Important part 1
 [The OAuth2 libraries this depends upon](https://packagist.org/packages/greew/oauth2-azure-provider) require **PHP 7.3 or later**, so you need to be running at least that in order to be able to use this authentication system. 
 
 Because of this requirement, this package is **not** enabled by default in PHPMailer's `composer.json` file, but appears [in the 'suggests' section](https://github.com/PHPMailer/PHPMailer/blob/master/composer.json#L49). You should take the suggested package and add it to your own `composer.json` file (the same one you use to install PHPMailer itself in your own project, **not** PHPMailer's own composer file), and then re-run `composer install` to load it. 
 
 This example requires the [greew/oauth2-azure-provider](https://packagist.org/greew/oauth2-azure-provider) OAuth2 provider, but any provider connecting to Microsoft will do.
+
+## Important part 2
+
+Microsoft Azure client secrets expires after a maximum of between 3 and 24 months (you can select the length yourself).
+
+If your authentication suddenly doesn't work anymore, please check the if the Client Secret has expired.
 
 ## Configure an OAuth2 app in Microsoft Azure
 
