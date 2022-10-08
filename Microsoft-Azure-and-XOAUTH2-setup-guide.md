@@ -140,4 +140,4 @@ Copy everything except the "Refresh Token: " part at the beginning and save at t
 
 Now we have all information needed to send mails.
 
-See an example in [azure_xoauth2.phpx](https://github.com/PHPMailer/PHPMailer/blob/master/examples/azure_xoauth2.phps)
+See an example in [azure_xoauth2.phps](https://github.com/PHPMailer/PHPMailer/blob/master/examples/azure_xoauth2.phps) (this hasn't been merged into the master branch yet - until now, see it here: https://github.com/PHPMailer/PHPMailer/pull/2793)
