@@ -7,7 +7,7 @@ This guide will show you how to set up XOAUTH2 with Microsoft Azure / Office365.
 
 Because of this requirement, this package is **not** enabled by default in PHPMailer's `composer.json` file, but appears [in the 'suggests' section](https://github.com/PHPMailer/PHPMailer/blob/master/composer.json#L49). You should take the suggested package and add it to your own `composer.json` file (the same one you use to install PHPMailer itself in your own project, **not** PHPMailer's own composer file), and then re-run `composer install` to load it. 
 
-This example requires the [greew/oauth2-azure-provider](https://packagist.org/greew/oauth2-azure-provider) OAuth2 provider, but any provider connecting to Microsoft will do.
+This example requires the [greew/oauth2-azure-provider](https://packagist.org/packages/greew/oauth2-azure-provider) OAuth2 provider, but any provider connecting to Microsoft will do.
 
 ## Important part 2
 
