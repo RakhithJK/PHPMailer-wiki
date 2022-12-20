@@ -1,0 +1,1 @@
+Check https://questgig.com/phpmailer to find out more
